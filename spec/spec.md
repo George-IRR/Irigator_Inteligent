@@ -81,3 +81,14 @@ Pentru terenuri intinse, unde nu avem semnal Wi-Fi, folosim noduri cu comunicare
 - **Masurarea vantului si a radiatiei solare:**
   - **Varianta fizica:** se poate adauga un anemometru mecanic cu cupe (cu contact reed sau senzor Hall) pe un nod din camp, care numara rotatiile pentru a afla viteza vantului ($u_2$).
   - **Varianta hibrida / backup prin API meteo:** senzorii de vant ieftini se pot bloca in timp de la praf sau ploaie, iar senzorii de radiatie solara sunt scumpi. De aceea, unitatea centrala poate prelua automat viteza vantului, radiatia solara si chiar $ET_0$ calculat direct dintr-un serviciu meteo gratuit (cum este **Open-Meteo API**), combinand datele meteo cu citirile locale de umiditate primite prin LoRa.
+
+---
+
+## 7. Controlul electronic low-cost pentru pompa si electrovalve
+
+Detaliile complete si comparatia de preturi se gasesc in [control-pompa-si-valve.md](../research/control-pompa-si-valve.md):
+
+- **De ce evitam releele mecanice:** un releu obisnuit de `5V` consuma `70-80 mA` doar ca sa tina contactul inchis, se uzeaza mecanic si nu permite reglarea turatiei pompei.
+- **Controlul pompei (`3-6V`):** folosim un tranzistor **MOSFET Logic-Level** (**AO3400**, **IRLZ44N** sau modul cu **D4184**, sub `5 lei`) impreuna cu o dioda antiparalel rapida **1N5819 (Schottky)**. Astfel nu avem pierderi de tensiune si putem regla debitul pompei din cod prin semnal PWM.
+- **Controlul mai multor electrovalve (`12V`):** folosim un singur circuit integrat **ULN2003A** (`~3 lei`), care are 7 canale si diode de protectie incluse, putand comanda direct pana la 7 electrovalve de la pinii de `3.3V` sau `5V` ai microcontrolerului.
+
