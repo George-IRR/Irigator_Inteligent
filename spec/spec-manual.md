@@ -16,3 +16,25 @@ De cercetat:
 * Energie
 * Apa
 * productie mai mare si calitativa (nivelul ridicat de apa din sol poate duce la alte probleme ale plantelor)
+
+
+## Cerinta sas.unitbv
+```
+Provocarea 3
+AquaSense — Irigații inteligente pentru reducerea consumului de apă
+AgriTech · IoT · Sustainability
+
+Problema
+Irigarea după un program fix poate duce la risipă de apă, mai ales când condițiile solului și vremea se schimbă.
+
+Ce trebuie să construiți
+O soluție care combină umiditatea solului cu date meteo pentru a recomanda momentul și cantitatea orientativă de irigare.
+
+Exemplu
+Un senzor transmite umiditatea solului, iar platforma compară datele cu prognoza meteo și recomandă amânarea irigării dacă este probabilă ploaia.
+
+Produs final
+Un dashboard pentru monitorizarea culturilor și recomandări de irigare, cu posibilitatea de a simula controlul unei pompe.
+
+Potențial de dezvoltare
+Produs pentru ferme, sere și administratori de spații verzi, cu economii măsurabile în consumul de apă.```
