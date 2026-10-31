@@ -23,14 +23,16 @@
     * 30.36 lei -> https://sigmanortec.ro/servomotor-mg996r-180-13kg
     * 10.29 lei -> https://sigmanortec.ro/Motor-pas-cu-pas-5V-28BYJ48-p126284049
 
-* comunicatie lora
+* comunicatie lora (doar ca idee, nu se mai implementeaza)
     * 35.21 lei -> https://sigmanortec.ro/Modul-LOra-433MHz-transceiver-SX1278-5km-p134712299
     * 42.63 lei -> https://ardushop.ro/ro/wireless-lora-si-rf/274-modul-lora-433mhz-transceiver-sx1278-5km-6427854002891.html
     * 57.28 lei -> https://sigmanortec.ro/modul-lora-rfm96-868mhz-ultra-long-range-33v
     * 259.35 lei -> https://sigmanortec.ro/placa-dezvoltare-ttgo-lora32-v21-868mhz-wifi-bluetooth
 
-* electronica de control
-    * 2.83 lei -> https://sigmanortec.ro/Modul-dual-MOSFET-de-putere-15A-400W-p187778881
+* electronica de control & alimentare
+    * 2.83 lei (in stoc, ref 33540) -> https://sigmanortec.ro/Modul-dual-MOSFET-de-putere-15A-400W-p187778881
+    * 6.49 lei (in stoc, echivalent) -> https://www.optimusdigital.ro/ro/butoane-i-comutatoare/2387-modul-comutator-pwm-de-putere-5-36-v-15-a.html
     * 0.30 lei -> https://sigmanortec.ro/Dioda-Schottky-1N5819-SMD-SS14-40V-p128704286
     * 0.97 lei -> https://ardushop.ro/ro/semiconductoare/819-dioda-schottky-1n5819-smd-ss14-40v-6427854010667.html
     * 4.53 lei -> https://sigmanortec.ro/Driver-motor-pas-cu-pas-ULN2003-p126284051
+    * coborare tensiune 12V -> 6V: modul step-down buck MP1584EN sau LM2596

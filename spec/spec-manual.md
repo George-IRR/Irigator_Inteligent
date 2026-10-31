@@ -5,11 +5,12 @@ Irigatie inteligenta pe baza unor [formule matematice](../research/baza-de-date_
 Posibile implementari:
 - folosim valve pentru fiecare rand pe latime (diferite altitudini, nevoi diferite)
 - folosim un nr mic de valve dar trebuie gasita o alta metoda de redirectionare a flow-ului
-- sistem de comunicatie lora pt distante lungi pentru calculul relativ de umiditate si al altor factori necesari formulelor
+- ~~sistem de comunicatie lora pt distante lungi pentru calculul relativ de umiditate si al altor factori necesari formulelor~~ (ramane doar ca idee, nu o sa fie implementat)
 - masurarea vantului
-- [Metode low cost pentru controlul pompei si al valvei/valvelor (releu, tranzistor ?)](../research/control-pompa-si-valve.md)
+- [Metode low cost pentru controlul pompei si al valvei/valvelor (releu, tranzistor, step-down 12V->6V)](../research/control-pompa-si-valve.md)
 
 De cercetat:
+- de facut research mai amanuntit daca este fezabil antrenarea unui model AI pentru a reduce consumul de apa
 - 
 
 ## Posibile probleme rezolvate:
