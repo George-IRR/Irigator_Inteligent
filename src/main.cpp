@@ -1,34 +1,46 @@
 #include <Arduino.h>
 
 // ==========================================
-// CONFIGURARE PINI
+// CONFIGURARE PINI ESP32
 // ==========================================
-// 1. Senzor umiditate sol (Pin 14 header / GPIO 25)
-#define SOIL_PIN 25
+#define SOIL_PIN 25   // Senzor umiditate sol (Pin 14 header, ADC2)
+#define FLOW_PIN 27   // Debitmetru YF-S401 (Fir galben, intrerupere)
+#define PUMP_PIN 26   // Modul MOSFET TRIG/PWM (Comanda Pompa R385)
 
-// 2. Senzor debit apa YF-S401 (Fir galben -> GPIO 27)
-#define FLOW_PIN 27
+// ==========================================
+// CONFIGURARE PWM POMPA (LEDC)
+// ==========================================
+#define PWM_CHANNEL   0
+#define PWM_FREQ      5000 // 5 kHz comutare silentioasa
+#define PWM_RES       8    // Rezolutie 8 biti: 0 (oprit) - 255 (100% forta)
 
 // ==========================================
 // CALIBRARE SENZOR SOL
 // ==========================================
-const int AIR_VALUE = 3200;   // Valoare in aer (uscat)
-const int WATER_VALUE = 1450; // Valoare in apa (ud)
+const int AIR_VALUE = 3200;   // Sol complet uscat
+const int WATER_VALUE = 1450; // Sol complet ud
 
 // ==========================================
 // VARIABILE DEBITMETRU YF-S401
 // ==========================================
-// YF-S401 (0.3 - 6 L/min): Formula standard este F = 98 * Q (Q in L/min)
-// Adica ~5880 impulsuri per litru (~5.88 impulsuri per mL)
-const float FLOW_CALIBRATION_FACTOR = 98.0; 
-
+const float FLOW_CALIBRATION_FACTOR = 98.0; // F = 98 * Q (L/min)
 volatile unsigned long pulseCount = 0;
 unsigned long lastCalcTime = 0;
 float totalMilliliters = 0.0;
 
-// Rutina de intrerupere (se apeleaza la fiecare impuls de la debitmetru)
+// Stare pompa curenta (duty: 0 - 255)
+int pumpSpeed = 0;
+
 void IRAM_ATTR pulseCounter() {
   pulseCount++;
+}
+
+// Functie pentru setarea puterii pompei (0 - 100%)
+void setPumpPower(int percent) {
+  percent = constrain(percent, 0, 100);
+  pumpSpeed = map(percent, 0, 100, 0, 255);
+  ledcWrite(PWM_CHANNEL, pumpSpeed);
+  Serial.printf("[POMPA] Putere setata: %d%% (PWM Duty: %d/255)\n", percent, pumpSpeed);
 }
 
 void setup() {
@@ -37,28 +49,48 @@ void setup() {
 
   Serial.println();
   Serial.println("==================================================");
-  Serial.println("  AquaSense - Test Senzor Sol + Debitmetru YF-S401");
-  Serial.println("  Senzor Sol: GPIO 25 | Debitmetru: GPIO 27       ");
+  Serial.println("  AquaSense - Test Senzor Sol, Debit & MOSFET    ");
+  Serial.println("  Sol: GPIO 25 | Debit: GPIO 27 | MOSFET: GPIO 26 ");
+  Serial.println("==================================================");
+  Serial.println("Comenzi in terminal:");
+  Serial.println("  '1' -> Porneste pompa la 100%");
+  Serial.println("  '2' -> Porneste pompa la 50% (PWM)");
+  Serial.println("  '0' -> Opreste pompa");
   Serial.println("==================================================");
 
-  // Configurare ADC senzor sol (12 biti: 0 - 4095, plaja 0 - 3.3V)
+  // 1. Configurare ADC sol
   analogReadResolution(12);
   analogSetPinAttenuation(SOIL_PIN, ADC_11db);
 
-  // Configurare pin debitmetru cu pullup intern
+  // 2. Configurare debitmetru
   pinMode(FLOW_PIN, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(FLOW_PIN), pulseCounter, FALLING);
+
+  // 3. Configurare PWM pentru comanda MOSFET
+  ledcSetup(PWM_CHANNEL, PWM_FREQ, PWM_RES);
+  ledcAttachPin(PUMP_PIN, PWM_CHANNEL);
+  setPumpPower(0); // Pornim cu pompa oprita
 
   lastCalcTime = millis();
 }
 
 void loop() {
+  // Verificare comenzi primite prin terminalul USART
+  if (Serial.available() > 0) {
+    char cmd = Serial.read();
+    if (cmd == '1') {
+      setPumpPower(100);
+    } else if (cmd == '2') {
+      setPumpPower(50);
+    } else if (cmd == '0') {
+      setPumpPower(0);
+    }
+  }
+
+  // La fiecare secunda afisam telemetria completa
   unsigned long now = millis();
-  
-  // Masuram si afisam la fiecare 1 secunda (1000 ms)
   if (now - lastCalcTime >= 1000) {
-    // 1. Calcule debitmetru
-    // Dezactivam temporar intreruperile pentru a citi variabila atomic
+    // Calcule debit
     noInterrupts();
     unsigned long pulses = pulseCount;
     pulseCount = 0;
@@ -67,18 +99,12 @@ void loop() {
     unsigned long elapsedTime = now - lastCalcTime;
     lastCalcTime = now;
 
-    // Frecventa impulsurilor (Hz = impulsuri pe secunda)
     float frequency = (pulses * 1000.0) / elapsedTime;
-
-    // Debit curent in L/min: Q = F / 98
     float flowRateLpm = frequency / FLOW_CALIBRATION_FACTOR;
-
-    // Volum trecut in acest interval (in mL)
-    // (flowRateLpm / 60) * (elapsedTime / 1000) * 1000 mL
     float currentMilliliters = (flowRateLpm / 60.0) * (elapsedTime / 1000.0) * 1000.0;
     totalMilliliters += currentMilliliters;
 
-    // 2. Citire senzor umiditate sol (medie din 10 citiri)
+    // Citire umiditate sol
     long sum = 0;
     for (int i = 0; i < 10; i++) {
       sum += analogRead(SOIL_PIN);
@@ -89,10 +115,11 @@ void loop() {
     int soilPercent = map(rawSoil, AIR_VALUE, WATER_VALUE, 0, 100);
     soilPercent = constrain(soilPercent, 0, 100);
 
-    // 3. Afisare pe terminal serial
+    // Afisare formatata
     Serial.println("--------------------------------------------------");
     Serial.printf("[SOL]        Raw: %-4d | %4.2fV | Umiditate: %3d%%\n", rawSoil, soilVoltage, soilPercent);
     Serial.printf("[DEBITMETRU] Impulsuri/s: %-3lu | Debit: %5.2f L/min | Total: %6.1f mL\n", 
                   pulses, flowRateLpm, totalMilliliters);
+    Serial.printf("[POMPA]      Stare: %s (%d%%)\n", (pumpSpeed > 0 ? "PORNITA" : "OPRITA"), map(pumpSpeed, 0, 255, 0, 100));
   }
 }
