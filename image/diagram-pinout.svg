@@ -1,0 +1,251 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1540.3109999999997 1509.99" width="1540.3109999999997" height="1509.99" style="--bg:#18181B;--fg:#F4F4F5;--line:#71717A;--muted:#A1A1AA;--surface:#27272A;--border:#3F3F46;background:var(--bg)">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap');
+  text { font-family: 'Inter', system-ui, sans-serif; }
+  svg {
+    /* Derived from --bg and --fg (overridable via --line, --accent, etc.) */
+    --_text:          var(--fg);
+    --_text-sec:      var(--muted, color-mix(in srgb, var(--fg) 60%, var(--bg)));
+    --_text-muted:    var(--muted, color-mix(in srgb, var(--fg) 40%, var(--bg)));
+    --_text-faint:    color-mix(in srgb, var(--fg) 25%, var(--bg));
+    --_line:          var(--line, color-mix(in srgb, var(--fg) 50%, var(--bg)));
+    --_arrow:         var(--accent, color-mix(in srgb, var(--fg) 85%, var(--bg)));
+    --_node-fill:     var(--surface, color-mix(in srgb, var(--fg) 3%, var(--bg)));
+    --_node-stroke:   var(--border, color-mix(in srgb, var(--fg) 20%, var(--bg)));
+    --_group-fill:    var(--bg);
+    --_group-hdr:     color-mix(in srgb, var(--fg) 5%, var(--bg));
+    --_inner-stroke:  color-mix(in srgb, var(--fg) 12%, var(--bg));
+    --_key-badge:     color-mix(in srgb, var(--fg) 10%, var(--bg));
+  }
+</style>
+<defs>
+  <marker id="arrowhead" markerWidth="8" markerHeight="5" refX="7" refY="2.5" orient="auto">
+    <polygon points="0 0, 8 2.5, 0 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+  <marker id="arrowhead-start" markerWidth="8" markerHeight="5" refX="1" refY="2.5" orient="auto-start-reverse">
+    <polygon points="8 0, 0 2.5, 8 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+</defs>
+<g class="subgraph" data-id="Sursa" data-label="Sursa Externa 12V DC">
+  <rect x="548.0409999999999" y="1272.6650000000002" width="133.23" height="161.8" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="548.0409999999999" y="1272.6650000000002" width="133.23" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="560.0409999999999" y="1286.6650000000002" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">Sursa Externa 12V DC</text>
+</g>
+<g class="subgraph" data-id="ESP32" data-label="Placa ESP-32S">
+  <rect x="82" y="270.04" width="266.89799999999997" height="616.0999999999999" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="82" y="270.04" width="266.89799999999997" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="94" y="284.04" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">Placa ESP-32S</text>
+</g>
+<g class="subgraph" data-id="SenzorSol1" data-label="Senzor Umiditate Sol #1 (v2.0)">
+  <rect x="559.7529999999999" y="221.11499999999998" width="109.518" height="226.70000000000002" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="559.7529999999999" y="221.11499999999998" width="109.518" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="571.7529999999999" y="235.11499999999998" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">Senzor Umiditate Sol #1 (v2.0)</text>
+</g>
+<g class="subgraph" data-id="SenzorSol2" data-label="Senzor Umiditate Sol #2 (v2.0)">
+  <rect x="571.7529999999999" y="730.515" width="109.518" height="226.70000000000002" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="571.7529999999999" y="730.515" width="109.518" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="583.7529999999999" y="744.515" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">Senzor Umiditate Sol #2 (v2.0)</text>
+</g>
+<g class="subgraph" data-id="SenzorDebit" data-label="Senzor Debit YF-S401">
+  <rect x="444.89799999999997" y="475.815" width="224.373" height="226.70000000000002" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="444.89799999999997" y="475.815" width="224.373" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="456.89799999999997" y="489.815" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">Senzor Debit YF-S401</text>
+</g>
+<g class="subgraph" data-id="MOSFET1" data-label="Modul Dual MOSFET #1 (Pompa)">
+  <rect x="765.271" y="599.1899999999999" width="174.726" height="421.4" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="765.271" y="599.1899999999999" width="174.726" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="777.271" y="613.1899999999999" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">Modul Dual MOSFET #1 (Pompa)</text>
+</g>
+<g class="subgraph" data-id="MOSFET2" data-label="Modul Dual MOSFET #2 (Valva)">
+  <rect x="765.271" y="1048.5900000000001" width="174.726" height="421.4" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="765.271" y="1048.5900000000001" width="174.726" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="777.271" y="1062.5900000000001" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">Modul Dual MOSFET #2 (Valva)</text>
+</g>
+<g class="subgraph" data-id="PompaGr" data-label="Pompa R385 (6-12V) + Protectie">
+  <rect x="999.997" y="761.4399999999999" width="500.31399999999985" height="161.8" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="999.997" y="761.4399999999999" width="500.31399999999985" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="1011.997" y="775.4399999999999" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">Pompa R385 (6-12V) + Protectie</text>
+</g>
+<g class="subgraph" data-id="ValvaGr" data-label="Valva 12V (Normal Deschisa) + Protectie">
+  <rect x="999.997" y="1210.84" width="479.566" height="161.8" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="999.997" y="1210.84" width="479.566" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="1011.997" y="1224.84" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">Valva 12V (Normal Deschisa) + Protectie</text>
+</g>
+<polyline class="edge" data-from="ESP_3V3" data-to="S1_VCC" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="308.89799999999997,592.09 444.6205,592.09 444.6205,348.465 580.343,348.465" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="ESP_GND1" data-to="S1_GND" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="297.0419999999999,786.79 378.9699999999999,786.79 378.9699999999999,413.36499999999995 580.343,413.36499999999995" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="S1_AOUT" data-to="GPIO34" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="657.861,283.565 759.2710000000001,283.565 759.2710000000001,40.04000000000002 40,40.04000000000002 40,851.69 120.97099999999998,851.69" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="ESP_3V3" data-to="S2_VCC" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="308.89799999999997,592.09 444.6205,592.09 444.6205,857.865 580.343,857.865" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="ESP_GND1" data-to="S2_GND" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="297.0419999999999,786.79 378.9699999999999,786.79 378.9699999999999,922.7650000000001 580.343,922.7650000000001" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="S2_AOUT" data-to="GPIO35" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="657.861,792.965 699.271,792.965 699.271,52.039999999999964 52,52.039999999999964 52,721.8899999999999 120.97099999999998,721.8899999999999" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="ESP_5V" data-to="YF_RED" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="285.927,462.28999999999996 426.89799999999997,462.28999999999996 426.89799999999997,603.165 460.89799999999997,603.165" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="ESP_GND1" data-to="YF_BLK" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="297.0419999999999,786.79 378.9699999999999,786.79 378.9699999999999,668.065 460.89799999999997,668.065" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="YF_YEL" data-to="GPIO27" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="653.271,538.2650000000001 687.271,538.2650000000001 687.271,64.04000000000008 64,64.04000000000008 64,332.49000000000007 120.97099999999998,332.4900000000001" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="GPIO25" data-to="M1_TRIG" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="314.0849999999999,527.1899999999999 378.89799999999997,527.1899999999999 378.89799999999997,210.11499999999995 735.271,210.11499999999995 735.271,661.64 796.8319999999999,661.6399999999999" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="ESP_GND2" data-to="M1_SGND" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="326.6819999999999,656.99 432.89799999999997,656.99 432.89799999999997,791.44 796.8319999999999,791.44" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="GPIO26" data-to="M2_TRIG" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="331.8689999999999,397.39 366.89799999999997,397.39 366.89799999999997,138.71499999999997 747.271,138.71499999999997 747.271,1111.04 796.8319999999999,1111.0400000000002" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="ESP_GND2" data-to="M2_SGND" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="326.6819999999999,656.99 432.89799999999997,656.99 432.89799999999997,1240.8400000000001 796.8319999999999,1240.8400000000001" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="V12_PLUS" data-to="M1_VINP" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="648.9689999999999,1335.1150000000002 722.9005,1335.1150000000002 722.9005,856.3399999999999 796.8319999999999,856.3399999999999" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="V12_GND" data-to="M1_VINM" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="681.573,1400.0150000000003 739.2024999999999,1400.0150000000003 739.2024999999999,921.24 796.8319999999999,921.24" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="V12_PLUS" data-to="M2_VINP" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="648.9689999999999,1335.1150000000002 722.9005,1335.1150000000002 722.9005,1305.7400000000002 796.8319999999999,1305.7400000000002" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="V12_GND" data-to="M2_VINM" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="681.573,1400.0150000000003 739.2024999999999,1400.0150000000003 739.2024999999999,1370.64 796.8319999999999,1370.64" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="M1_OUTP" data-to="P_PLUS" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="912.1409999999998,986.1399999999999 981.997,986.14 981.997,888.79 1016.9232499999999,888.79" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="M1_OUTM" data-to="P_MINUS" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="908.4359999999999,726.54 981.997,726.54 981.997,823.89 1016.92325,823.8899999999999" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="M2_OUTP" data-to="V_PLUS" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="912.1409999999998,1435.5400000000002 981.997,1435.5400000000002 981.997,1338.1899999999998 1016.9232499999999,1338.19" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="M2_OUTM" data-to="V_MINUS" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="908.4359999999999,1175.94 981.997,1175.94 981.997,1273.29 1016.9232499999999,1273.29" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="P_PLUS" data-to="D1" data-style="solid" data-arrow-start="false" data-arrow-end="false" points="1155.20325,888.79 1172.441625,888.79 1172.441625,856.34 1189.68,856.34" fill="none" stroke="var(--_line)" stroke-width="1" />
+<polyline class="edge" data-from="P_MINUS" data-to="D1" data-style="solid" data-arrow-start="false" data-arrow-end="false" points="1151.4982499999999,823.89 1172.441625,823.89 1172.441625,856.34 1189.68,856.34" fill="none" stroke="var(--_line)" stroke-width="1" />
+<polyline class="edge" data-from="V_PLUS" data-to="D2" data-style="solid" data-arrow-start="false" data-arrow-end="false" points="1130.0092499999998,1338.19 1159.844625,1338.19 1159.844625,1305.74 1189.68,1305.74" fill="none" stroke="var(--_line)" stroke-width="1" />
+<polyline class="edge" data-from="V_MINUS" data-to="D2" data-style="solid" data-arrow-start="false" data-arrow-end="false" points="1126.30425,1273.29 1159.844625,1273.29 1159.844625,1305.74 1189.68,1305.74" fill="none" stroke="var(--_line)" stroke-width="1" />
+<g class="node" data-id="V12_PLUS" data-label="+12V" data-shape="rectangle">
+  <rect x="580.343" y="1316.6650000000002" width="68.62599999999999" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="614.656" y="1335.1150000000002" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">+12V</text>
+</g>
+<g class="node" data-id="V12_GND" data-label="GND (-12V)" data-shape="rectangle">
+  <rect x="580.343" y="1381.5650000000003" width="101.22999999999999" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="630.958" y="1400.0150000000003" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">GND (-12V)</text>
+</g>
+<g class="node" data-id="ESP_3V3" data-label="Pin 3V3 (3.3V)" data-shape="rectangle">
+  <rect x="185.438" y="573.64" width="123.45999999999998" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="247.16799999999998" y="592.09" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Pin 3V3 (3.3V)</text>
+</g>
+<g class="node" data-id="ESP_5V" data-label="Pin 5V / VIN (din USB)" data-shape="rectangle">
+  <rect x="120.97099999999998" y="443.84000000000003" width="164.95600000000002" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="203.44899999999998" y="462.29" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Pin 5V / VIN (din USB)</text>
+</g>
+<g class="node" data-id="ESP_GND1" data-label="Pin GND (spre senzori)" data-shape="rectangle">
+  <rect x="120.97099999999998" y="768.3399999999999" width="176.07099999999997" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="209.00649999999996" y="786.79" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Pin GND (spre senzori)</text>
+</g>
+<g class="node" data-id="ESP_GND2" data-label="Pin GND (spre MOSFET-uri)" data-shape="rectangle">
+  <rect x="120.97099999999998" y="638.54" width="205.71099999999996" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="223.82649999999995" y="656.99" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Pin GND (spre MOSFET-uri)</text>
+</g>
+<g class="node" data-id="GPIO34" data-label="Pin GPIO 34 (ADC1_CH6)" data-shape="rectangle">
+  <rect x="120.97099999999998" y="833.24" width="181.99899999999997" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="211.97049999999996" y="851.69" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Pin GPIO 34 (ADC1_CH6)</text>
+</g>
+<g class="node" data-id="GPIO35" data-label="Pin GPIO 35 (ADC1_CH7)" data-shape="rectangle">
+  <rect x="120.97099999999998" y="703.44" width="181.99899999999997" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="211.97049999999996" y="721.8900000000001" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Pin GPIO 35 (ADC1_CH7)</text>
+</g>
+<g class="node" data-id="GPIO27" data-label="Pin GPIO 27 (Interrupt)" data-shape="rectangle">
+  <rect x="120.97099999999998" y="314.04" width="170.14299999999997" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="206.04249999999996" y="332.49" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Pin GPIO 27 (Interrupt)</text>
+</g>
+<g class="node" data-id="GPIO25" data-label="Pin GPIO 25 (PWM Pompa)" data-shape="rectangle">
+  <rect x="120.97099999999998" y="508.74" width="193.11399999999998" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="217.52799999999996" y="527.19" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Pin GPIO 25 (PWM Pompa)</text>
+</g>
+<g class="node" data-id="GPIO26" data-label="Pin GPIO 26 (Comanda Valva)" data-shape="rectangle">
+  <rect x="120.97099999999998" y="378.94" width="210.89799999999997" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="226.41999999999996" y="397.39" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Pin GPIO 26 (Comanda Valva)</text>
+</g>
+<g class="node" data-id="S1_VCC" data-label="VCC" data-shape="rectangle">
+  <rect x="580.343" y="330.015" width="68.62599999999999" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="614.656" y="348.465" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">VCC</text>
+</g>
+<g class="node" data-id="S1_GND" data-label="GND" data-shape="rectangle">
+  <rect x="580.343" y="394.91499999999996" width="68.62599999999999" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="614.656" y="413.36499999999995" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">GND</text>
+</g>
+<g class="node" data-id="S1_AOUT" data-label="AOUT" data-shape="rectangle">
+  <rect x="580.343" y="265.115" width="77.518" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="619.102" y="283.565" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">AOUT</text>
+</g>
+<g class="node" data-id="S2_VCC" data-label="VCC" data-shape="rectangle">
+  <rect x="580.343" y="839.415" width="68.62599999999999" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="614.656" y="857.865" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">VCC</text>
+</g>
+<g class="node" data-id="S2_GND" data-label="GND" data-shape="rectangle">
+  <rect x="580.343" y="904.315" width="68.62599999999999" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="614.656" y="922.7650000000001" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">GND</text>
+</g>
+<g class="node" data-id="S2_AOUT" data-label="AOUT" data-shape="rectangle">
+  <rect x="580.343" y="774.515" width="77.518" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="619.102" y="792.965" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">AOUT</text>
+</g>
+<g class="node" data-id="YF_RED" data-label="Fir Rosu (VCC 5V)" data-shape="rectangle">
+  <rect x="460.89799999999997" y="584.715" width="147.91299999999998" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="534.8544999999999" y="603.1650000000001" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Fir Rosu (VCC 5V)</text>
+</g>
+<g class="node" data-id="YF_BLK" data-label="Fir Negru (GND)" data-shape="rectangle">
+  <rect x="460.89799999999997" y="649.615" width="135.31599999999997" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="528.5559999999999" y="668.065" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Fir Negru (GND)</text>
+</g>
+<g class="node" data-id="YF_YEL" data-label="Fir Galben (Semnal Pulse)" data-shape="rectangle">
+  <rect x="460.89799999999997" y="519.815" width="192.373" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="557.0844999999999" y="538.2650000000001" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Fir Galben (Semnal Pulse)</text>
+</g>
+<g class="node" data-id="M1_TRIG" data-label="Pin TRIG / PWM" data-shape="rectangle">
+  <rect x="796.8319999999999" y="643.1899999999999" width="132.35199999999998" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="863.0079999999998" y="661.64" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Pin TRIG / PWM</text>
+</g>
+<g class="node" data-id="M1_SGND" data-label="Pin GND (Semnal)" data-shape="rectangle">
+  <rect x="796.8319999999999" y="772.99" width="142.726" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="868.1949999999999" y="791.44" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Pin GND (Semnal)</text>
+</g>
+<g class="node" data-id="M1_VINP" data-label="Borne VIN+" data-shape="rectangle">
+  <rect x="796.8319999999999" y="837.8899999999999" width="109.381" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="851.5224999999999" y="856.3399999999999" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Borne VIN+</text>
+</g>
+<g class="node" data-id="M1_VINM" data-label="Borne VIN-" data-shape="rectangle">
+  <rect x="796.8319999999999" y="902.79" width="105.67599999999999" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="849.6699999999998" y="921.24" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Borne VIN-</text>
+</g>
+<g class="node" data-id="M1_OUTP" data-label="Borne OUT+" data-shape="rectangle">
+  <rect x="796.8319999999999" y="967.6899999999999" width="115.30900000000001" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="854.4864999999999" y="986.14" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Borne OUT+</text>
+</g>
+<g class="node" data-id="M1_OUTM" data-label="Borne OUT-" data-shape="rectangle">
+  <rect x="796.8319999999999" y="708.0899999999999" width="111.604" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="852.6339999999999" y="726.54" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Borne OUT-</text>
+</g>
+<g class="node" data-id="M2_TRIG" data-label="Pin TRIG / PWM" data-shape="rectangle">
+  <rect x="796.8319999999999" y="1092.5900000000001" width="132.35199999999998" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="863.0079999999998" y="1111.0400000000002" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Pin TRIG / PWM</text>
+</g>
+<g class="node" data-id="M2_SGND" data-label="Pin GND (Semnal)" data-shape="rectangle">
+  <rect x="796.8319999999999" y="1222.39" width="142.726" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="868.1949999999999" y="1240.8400000000001" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Pin GND (Semnal)</text>
+</g>
+<g class="node" data-id="M2_VINP" data-label="Borne VIN+" data-shape="rectangle">
+  <rect x="796.8319999999999" y="1287.2900000000002" width="109.381" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="851.5224999999999" y="1305.7400000000002" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Borne VIN+</text>
+</g>
+<g class="node" data-id="M2_VINM" data-label="Borne VIN-" data-shape="rectangle">
+  <rect x="796.8319999999999" y="1352.19" width="105.67599999999999" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="849.6699999999998" y="1370.64" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Borne VIN-</text>
+</g>
+<g class="node" data-id="M2_OUTP" data-label="Borne OUT+" data-shape="rectangle">
+  <rect x="796.8319999999999" y="1417.0900000000001" width="115.30900000000001" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="854.4864999999999" y="1435.5400000000002" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Borne OUT+</text>
+</g>
+<g class="node" data-id="M2_OUTM" data-label="Borne OUT-" data-shape="rectangle">
+  <rect x="796.8319999999999" y="1157.4900000000002" width="111.604" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="852.6339999999999" y="1175.9400000000003" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Borne OUT-</text>
+</g>
+<g class="node" data-id="P_PLUS" data-label="Borne Pompa (+)" data-shape="rectangle">
+  <rect x="1016.9232499999999" y="870.3399999999999" width="138.28" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1086.06325" y="888.79" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Borne Pompa (+)</text>
+</g>
+<g class="node" data-id="P_MINUS" data-label="Borne Pompa (-)" data-shape="rectangle">
+  <rect x="1016.9232499999999" y="805.4399999999999" width="134.575" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1084.21075" y="823.89" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Borne Pompa (-)</text>
+</g>
+<g class="node" data-id="D1" data-label="Dioda 1N5819 #1 (Catod/Linia la +, Anod la -)" data-shape="rectangle">
+  <rect x="1189.68" y="837.89" width="282.0339999999999" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1330.6970000000001" y="856.34" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Dioda 1N5819 #1 (Catod/Linia la +, Anod la -)</text>
+</g>
+<g class="node" data-id="V_PLUS" data-label="Fir Valva (+)" data-shape="rectangle">
+  <rect x="1016.9232499999999" y="1319.74" width="113.086" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1073.46625" y="1338.19" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Fir Valva (+)</text>
+</g>
+<g class="node" data-id="V_MINUS" data-label="Fir Valva (-)" data-shape="rectangle">
+  <rect x="1016.9232499999999" y="1254.84" width="109.381" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1071.61375" y="1273.29" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Fir Valva (-)</text>
+</g>
+<g class="node" data-id="D2" data-label="Dioda 1N5819 #2 (Catod/Linia la +, Anod la -)" data-shape="rectangle">
+  <rect x="1189.68" y="1287.29" width="286.47999999999996" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1332.92" y="1305.74" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Dioda 1N5819 #2 (Catod/Linia la +, Anod la -)</text>
+</g>
+</svg>

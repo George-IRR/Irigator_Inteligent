@@ -1,0 +1,187 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1254.03325 1450.6999999999998" width="1254.03325" height="1450.6999999999998" style="--bg:#18181B;--fg:#F4F4F5;--line:#71717A;--muted:#A1A1AA;--surface:#27272A;--border:#3F3F46;background:var(--bg)">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap');
+  text { font-family: 'Inter', system-ui, sans-serif; }
+  svg {
+    /* Derived from --bg and --fg (overridable via --line, --accent, etc.) */
+    --_text:          var(--fg);
+    --_text-sec:      var(--muted, color-mix(in srgb, var(--fg) 60%, var(--bg)));
+    --_text-muted:    var(--muted, color-mix(in srgb, var(--fg) 40%, var(--bg)));
+    --_text-faint:    color-mix(in srgb, var(--fg) 25%, var(--bg));
+    --_line:          var(--line, color-mix(in srgb, var(--fg) 50%, var(--bg)));
+    --_arrow:         var(--accent, color-mix(in srgb, var(--fg) 85%, var(--bg)));
+    --_node-fill:     var(--surface, color-mix(in srgb, var(--fg) 3%, var(--bg)));
+    --_node-stroke:   var(--border, color-mix(in srgb, var(--fg) 20%, var(--bg)));
+    --_group-fill:    var(--bg);
+    --_group-hdr:     color-mix(in srgb, var(--fg) 5%, var(--bg));
+    --_inner-stroke:  color-mix(in srgb, var(--fg) 12%, var(--bg));
+    --_key-badge:     color-mix(in srgb, var(--fg) 10%, var(--bg));
+  }
+</style>
+<defs>
+  <marker id="arrowhead" markerWidth="8" markerHeight="5" refX="7" refY="2.5" orient="auto">
+    <polygon points="0 0, 8 2.5, 0 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+  <marker id="arrowhead-start" markerWidth="8" markerHeight="5" refX="1" refY="2.5" orient="auto-start-reverse">
+    <polygon points="8 0, 0 2.5, 8 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+</defs>
+<g class="subgraph" data-id="Alimentare" data-label="Alimentare">
+  <rect x="691.0205833333332" y="244.9" width="513.6589999999999" height="96.9" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="691.0205833333332" y="244.9" width="513.6589999999999" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="703.0205833333332" y="258.9" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">Alimentare</text>
+</g>
+<g class="subgraph" data-id="Senzori" data-label="Senzori (Intrari)">
+  <rect x="88" y="58" width="706.6149999999999" height="132.9" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="88" y="58" width="706.6149999999999" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="100" y="72" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">Senzori (Intrari)</text>
+</g>
+<g class="subgraph" data-id="Control" data-label="Unitate Control">
+  <rect x="442.6180833333333" y="401.8" width="334.06112499999995" height="250.1" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="442.6180833333333" y="401.8" width="334.06112499999995" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="454.6180833333333" y="415.8" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">Unitate Control</text>
+</g>
+<g class="subgraph" data-id="Putere" data-label="Etaj Putere (Pe placa PCB 7x9cm)">
+  <rect x="721.3764999999999" y="756.2" width="477.3499999999999" height="96.9" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="721.3764999999999" y="756.2" width="477.3499999999999" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="733.3764999999999" y="770.2" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">Etaj Putere (Pe placa PCB 7x9cm)</text>
+</g>
+<g class="subgraph" data-id="Actuatoare" data-label="Actuatoare + Traseu Apa (Furtun 6x8mm)">
+  <rect x="278.4492499999999" y="981.3999999999999" width="935.584" height="403.29999999999995" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="278.4492499999999" y="981.3999999999999" width="935.584" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="290.4492499999999" y="995.3999999999999" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">Actuatoare + Traseu Apa (Furtun 6x8mm)</text>
+</g>
+<polyline class="edge" data-from="USB5V" data-to="ESP" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="835.0700833333332,325.79999999999995 835.0700833333333,383.79999999999995 638.5996833333332,383.79999999999995 638.5996833333331,445.79999999999995" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="Sursa12V" data-to="MOS1" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="1089.899583333333,325.79999999999995 1089.899583333333,563 840.6024999999998,563 840.6024999999998,800.2" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="Sursa12V" data-to="MOS2" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="1089.899583333333,325.79999999999995 1089.899583333333,563 1077.2775,563 1077.2775,800.2" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="Sol1" data-to="ESP" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Semnal Analogic" points="668.3494999999999,138.9 668.3494999999999,150.9 566.1065833333332,150.9 566.1065833333332,315.5 521.8745833333332,315.5 521.8745833333332,383.8 548.6088833333332,383.8 548.6088833333333,445.8" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="Sol2" data-to="ESP" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Semnal Analogic" points="218.7115,138.9 218.7115,162.9 323.17741666666666,162.9 323.17741666666666,339.5 345.67741666666666,339.5 345.67741666666666,383.8 503.61348333333325,383.8 503.61348333333336,445.8" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="Debit" data-to="ESP" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Impulsuri (L/min)" points="473.86366666666663,138.9 473.86366666666663,162.9 576.1065833333332,162.9 576.1065833333332,315.5 620.3385833333333,315.5 620.3385833333333,383.8 593.6042833333332,383.8 593.6042833333333,445.8" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="ESP" data-to="MOS1" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Comanda PWM / ON-OFF" points="514.8623333333333,482.70000000000005 514.8623333333333,494.70000000000005 507.1230833333332,494.70000000000005 507.1230833333333,738.2 806.1938333333333,738.2 806.1938333333331,800.2" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="ESP" data-to="MOS2" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Comanda ON-OFF" points="571.1065833333332,482.70000000000005 571.1065833333332,494.70000000000005 541.7452083333333,494.70000000000005 541.7452083333333,669.9000000000001 1110.9321666666665,669.9000000000001 1110.9321666666665,738.2 1042.1278333333332,738.2 1042.127833333333,800.2" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="MOS1" data-to="Pompa" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="12V Comutat" points="840.6024999999998,837.1 840.6024999999998,895.1000000000001 814.8460833333332,895.1000000000001 814.8460833333332,1142.6 804.8559166666666,1142.6 804.8559166666666,1178.6" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="MOS2" data-to="Valva" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="12V Comutat" points="1077.2774999999997,837.1 1077.2775,963.4000000000001 1103.0339166666665,963.4000000000001 1103.0339166666665,1178.6" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="Pompa" data-to="Debit" data-style="thick" data-arrow-start="false" data-arrow-end="true" data-label="Furtun 6x8mm" points="764.7662499999999,1215.4999999999998 764.7662499999999,1402.6999999999998 78,1402.6999999999998 78,40 445.7535,40 445.7535,102" fill="none" stroke="var(--_line)" stroke-width="2" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="Debit" data-to="Teu" data-style="thick" data-arrow-start="false" data-arrow-end="true" data-label="Furtun 6x8mm" points="417.6433333333333,138.9 417.6433333333333,150.9 313.17741666666666,150.9 313.17741666666666,339.5 290.67741666666666,339.5 290.67741666666666,963.3999999999999 609.6380833333333,963.3999999999999 609.6380833333333,1025.3999999999999" fill="none" stroke="var(--_line)" stroke-width="2" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="ESP" data-to="Dashboard" data-style="solid" data-arrow-start="true" data-arrow-end="true" data-label="Wi-Fi" points="627.3508333333332,482.70000000000005 627.3508333333332,494.70000000000005 656.7122083333333,494.70000000000005 656.7122083333333,599" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" marker-start="url(#arrowhead-start)" />
+<polyline class="edge" data-from="Bazin" data-to="Pompa" data-style="thick" data-arrow-start="false" data-arrow-end="true" data-label="Furtun 6x8mm" points="454.10258333333326,1062.3 454.10258333333326,1086.3 724.6765833333333,1086.3 724.6765833333333,1178.6" fill="none" stroke="var(--_line)" stroke-width="2" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="Teu" data-to="Rand1" data-style="thick" data-arrow-start="false" data-arrow-end="true" data-label="Ramura 1" points="584.1214166666666,1062.3 584.1214166666666,1098.3 455.4732499999999,1098.3 455.4732499999999,1178.6" fill="none" stroke="var(--_line)" stroke-width="2" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="Teu" data-to="Valva" data-style="thick" data-arrow-start="false" data-arrow-end="true" data-label="Ramura 2" points="635.1547499999999,1062.3 635.1547499999999,1074.3 1008.0345833333332,1074.3 1008.0345833333332,1178.6" fill="none" stroke="var(--_line)" stroke-width="2" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="Valva" data-to="Rand2" data-style="thick" data-arrow-start="false" data-arrow-end="true" data-label="Furtun 6x8mm" points="1055.53425,1215.4999999999998 1055.53425,1331.7999999999997" fill="none" stroke="var(--_line)" stroke-width="2" marker-end="url(#arrowhead)" />
+<g class="edge-label" data-from="Sol1" data-to="ESP" data-label="Semnal Analogic">
+  <rect x="473.8745833333332" y="322.5" width="95.46400000000003" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="521.6065833333332" y="337.65" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Semnal Analogic</text>
+</g>
+<g class="edge-label" data-from="Sol2" data-to="ESP" data-label="Semnal Analogic">
+  <rect x="297.67741666666666" y="346.5" width="95.46400000000003" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="345.4094166666667" y="361.65" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Semnal Analogic</text>
+</g>
+<g class="edge-label" data-from="Debit" data-to="ESP" data-label="Impulsuri (L/min)">
+  <rect x="573.3385833333334" y="322.5" width="93.682" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="620.1795833333334" y="337.65" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Impulsuri (L/min)</text>
+</g>
+<g class="edge-label" data-from="ESP" data-to="MOS1" data-label="Comanda PWM / ON-OFF">
+  <rect x="440.1230833333333" y="700.9000000000001" width="133.48000000000002" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="506.8630833333333" y="716.0500000000001" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Comanda PWM / ON-OFF</text>
+</g>
+<g class="edge-label" data-from="ESP" data-to="MOS2" data-label="Comanda ON-OFF">
+  <rect x="1059.9321666666665" y="676.9000000000001" width="101.99799999999999" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="1110.9311666666665" y="692.0500000000001" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Comanda ON-OFF</text>
+</g>
+<g class="edge-label" data-from="MOS1" data-to="Pompa" data-label="12V Comutat">
+  <rect x="778.8460833333331" y="902.0999999999999" width="71.70400000000001" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="814.6980833333331" y="917.2499999999999" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">12V Comutat</text>
+</g>
+<g class="edge-label" data-from="MOS2" data-to="Valva" data-label="12V Comutat">
+  <rect x="1041.2775" y="902.0999999999999" width="71.70400000000001" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="1077.1295" y="917.2499999999999" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">12V Comutat</text>
+</g>
+<g class="edge-label" data-from="Pompa" data-to="Debit" data-label="Furtun 6x8mm">
+  <rect x="36" y="1365.3999999999999" width="83.584" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="77.792" y="1380.55" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Furtun 6x8mm</text>
+</g>
+<g class="edge-label" data-from="Debit" data-to="Teu" data-label="Furtun 6x8mm">
+  <rect x="248.6774166666667" y="902.0999999999999" width="83.584" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="290.4694166666667" y="917.2499999999999" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Furtun 6x8mm</text>
+</g>
+<g class="edge-label" data-from="ESP" data-to="Dashboard" data-label="Wi-Fi">
+  <rect x="635.7122083333333" y="525.7" width="41.41" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="656.4172083333333" y="540.85" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Wi-Fi</text>
+</g>
+<g class="edge-label" data-from="Bazin" data-to="Pompa" data-label="Furtun 6x8mm">
+  <rect x="682.6765833333333" y="1105.2999999999997" width="83.584" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="724.4685833333333" y="1120.4499999999998" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Furtun 6x8mm</text>
+</g>
+<g class="edge-label" data-from="Teu" data-to="Rand1" data-label="Ramura 1">
+  <rect x="425.9732499999999" y="1105.2999999999997" width="58.636" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="455.2912499999999" y="1120.4499999999998" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Ramura 1</text>
+</g>
+<g class="edge-label" data-from="Teu" data-to="Valva" data-label="Ramura 2">
+  <rect x="976.5345833333332" y="1105.2999999999997" width="62.2" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="1007.6345833333332" y="1120.4499999999998" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Ramura 2</text>
+</g>
+<g class="edge-label" data-from="Valva" data-to="Rand2" data-label="Furtun 6x8mm">
+  <rect x="1013.53425" y="1258.4999999999998" width="83.584" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="1055.32625" y="1273.6499999999999" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Furtun 6x8mm</text>
+</g>
+<g class="node" data-id="Sursa12V" data-label="Sursa 12V DC (pentru forta)" data-shape="rectangle">
+  <rect x="991.1195833333331" y="288.9" width="197.55999999999997" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1089.899583333333" y="307.34999999999997" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Sursa 12V DC (pentru forta)</text>
+</g>
+<g class="node" data-id="USB5V" data-label="Alimentare 5V USB (pentru ESP-32S)" data-shape="rectangle">
+  <rect x="707.0205833333332" y="288.9" width="256.09899999999993" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="835.0700833333332" y="307.34999999999997" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Alimentare 5V USB (pentru ESP-32S)</text>
+</g>
+<g class="node" data-id="Sol1" data-label="Senzor Umiditate Sol #1 (Rand 1)" data-shape="rectangle">
+  <rect x="558.084" y="102" width="220.53099999999995" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="668.3494999999999" y="120.45" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Senzor Umiditate Sol #1 (Rand 1)</text>
+</g>
+<g class="node" data-id="Sol2" data-label="Senzor Umiditate Sol #2 (Rand 2)" data-shape="rectangle">
+  <rect x="104" y="102" width="229.423" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="218.7115" y="120.45" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Senzor Umiditate Sol #2 (Rand 2)</text>
+</g>
+<g class="node" data-id="Debit" data-label="Senzor Debit YF-S401" data-shape="rectangle">
+  <rect x="361.423" y="102" width="168.66099999999997" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="445.7535" y="120.45" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Senzor Debit YF-S401</text>
+</g>
+<g class="node" data-id="ESP" data-label="Placa ESP-32S (Wi-Fi + Logica)" data-shape="rectangle">
+  <rect x="458.6180833333333" y="445.8" width="224.97699999999995" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="571.1065833333332" y="464.25" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Placa ESP-32S (Wi-Fi + Logica)</text>
+</g>
+<g class="node" data-id="Dashboard" data-label="Dashboard Web + API Meteo" data-shape="rectangle">
+  <rect x="552.7452083333333" y="599" width="207.93399999999997" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="656.7122083333333" y="617.45" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Dashboard Web + API Meteo</text>
+</g>
+<g class="node" data-id="MOS1" data-label="Modul Dual MOSFET #1 (15A)" data-shape="rectangle">
+  <rect x="737.3764999999999" y="800.2" width="206.45199999999994" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="840.6024999999998" y="818.6500000000001" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Modul Dual MOSFET #1 (15A)</text>
+</g>
+<g class="node" data-id="MOS2" data-label="Modul Dual MOSFET #2 (15A)" data-shape="rectangle">
+  <rect x="971.8284999999998" y="800.2" width="210.89799999999997" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1077.2775" y="818.6500000000001" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Modul Dual MOSFET #2 (15A)</text>
+</g>
+<g class="node" data-id="Bazin" data-label="Bazin Apa" data-shape="rectangle">
+  <rect x="403.11708333333326" y="1025.3999999999999" width="101.971" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="454.10258333333326" y="1043.85" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Bazin Apa</text>
+</g>
+<g class="node" data-id="Pompa" data-label="Pompa R385 (6-12V) + Dioda 1N5819" data-shape="rectangle">
+  <rect x="644.4972499999999" y="1178.6" width="240.53799999999995" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="764.7662499999999" y="1197.05" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Pompa R385 (6-12V) + Dioda 1N5819</text>
+</g>
+<g class="node" data-id="Teu" data-label="Conector T (6.8mm)" data-shape="rectangle">
+  <rect x="533.0880833333333" y="1025.3999999999999" width="153.1" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="609.6380833333333" y="1043.85" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Conector T (6.8mm)</text>
+</g>
+<g class="node" data-id="Valva" data-label="Valva 12V Normal Deschisa + Dioda 1N5819" data-shape="rectangle">
+  <rect x="913.0352499999999" y="1178.6" width="284.99799999999993" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1055.53425" y="1197.05" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Valva 12V Normal Deschisa + Dioda 1N5819</text>
+</g>
+<g class="node" data-id="Rand1" data-label="Randul 1 (Udat cand valva e INCHISA sau ambele)" data-shape="rectangle">
+  <rect x="294.4492499999999" y="1178.6" width="322.048" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="455.4732499999999" y="1197.05" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Randul 1 (Udat cand valva e INCHISA sau ambele)</text>
+</g>
+<g class="node" data-id="Rand2" data-label="Randul 2 (Controlat de Valva 12V)" data-shape="rectangle">
+  <rect x="940.0817499999998" y="1331.7999999999997" width="230.90499999999997" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1055.5342499999997" y="1350.2499999999998" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Randul 2 (Controlat de Valva 12V)</text>
+</g>
+</svg>
