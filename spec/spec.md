@@ -71,24 +71,27 @@ Am verificat specificatiile pieselor propuse in [parts.md](parts.md) pentru a ve
 
 ---
 
-## 6. Comunicatie LoRa si masurarea factorilor meteo (umiditate, vant)
+## 6. Masurarea factorilor meteo (umiditate, vant) si comunicatie (LoRa - doar ca idee)
 
-Pentru terenuri intinse, unde nu avem semnal Wi-Fi, folosim noduri cu comunicare radio **LoRa** (consum foarte mic de baterie, raza de ordinul kilometrilor):
+*Nota: Comunicatia prin LoRa ramane doar la nivel de idee/concept pentru extindere pe terenuri mari (nu o sa fie implementata acum, folosim conectivitate directa/Wi-Fi).*
 
-- **Nodurile din camp (LoRa):**
+Pentru terenuri intinse, unde nu avem semnal Wi-Fi, ideea ar fi folosirea unor noduri cu comunicare radio **LoRa** (consum foarte mic de baterie, raza de ordinul kilometrilor):
+
+- **Senzorii din teren:**
   - Masoara temperatura si umiditatea relativa a aerului (ex. senzor **SHT31** sau **BME280**) si umiditatea din sol (senzor capacitiv) pentru a verifica starea reala a pamantului.
-  - Intra in mod *deep sleep* intre citiri si trimit datele la fiecare 15-30 de minute catre unitatea centrala.
+  - In varianta cu LoRa (doar concept), nodurile ar intra in mod *deep sleep* intre citiri si ar trimite datele la fiecare 15-30 de minute catre unitatea centrala.
 - **Masurarea vantului si a radiatiei solare:**
-  - **Varianta fizica:** se poate adauga un anemometru mecanic cu cupe (cu contact reed sau senzor Hall) pe un nod din camp, care numara rotatiile pentru a afla viteza vantului ($u_2$).
-  - **Varianta hibrida / backup prin API meteo:** senzorii de vant ieftini se pot bloca in timp de la praf sau ploaie, iar senzorii de radiatie solara sunt scumpi. De aceea, unitatea centrala poate prelua automat viteza vantului, radiatia solara si chiar $ET_0$ calculat direct dintr-un serviciu meteo gratuit (cum este **Open-Meteo API**), combinand datele meteo cu citirile locale de umiditate primite prin LoRa.
+  - **Varianta fizica:** se poate adauga un anemometru mecanic cu cupe (cu contact reed sau senzor Hall) care numara rotatiile pentru a afla viteza vantului ($u_2$).
+  - **Varianta hibrida / backup prin API meteo:** senzorii de vant ieftini se pot bloca in timp de la praf sau ploaie, iar senzorii de radiatie solara sunt scumpi. De aceea, unitatea centrala poate prelua automat viteza vantului, radiatia solara si chiar $ET_0$ calculat direct dintr-un serviciu meteo gratuit (cum este **Open-Meteo API**), combinand datele meteo cu citirile locale de umiditate.
 
 ---
 
-## 7. Controlul electronic low-cost pentru pompa si electrovalve
+## 7. Controlul electronic low-cost si alimentarea pentru pompa si electrovalve
 
-Detaliile complete si comparatia de preturi se gasesc in [control-pompa-si-valve.md](../research/control-pompa-si-valve.md):
+Detaliile complete, schema de legare si comparatia de preturi se gasesc in [control-pompa-si-valve.md](../research/control-pompa-si-valve.md):
 
 - **De ce evitam releele mecanice:** un releu obisnuit de `5V` consuma `70-80 mA` doar ca sa tina contactul inchis, se uzeaza mecanic si nu permite reglarea turatiei pompei.
-- **Controlul pompei (`3-6V`):** folosim un tranzistor **MOSFET Logic-Level** (**AO3400**, **IRLZ44N** sau modul cu **D4184**, sub `5 lei`) impreuna cu o dioda antiparalel rapida **1N5819 (Schottky)**. Astfel nu avem pierderi de tensiune si putem regla debitul pompei din cod prin semnal PWM.
+- **Coborarea tensiunii de la `12V` la `6V` pentru pompa:** folosim un convertor **DC-DC Step-Down (Buck)** precum **MP1584EN** sau **LM2596** (eficienta `85-92%`, nu se incalzeste ca un regulator liniar `LM7806`). Ca alternativa si mai compacta, un modul step-down cu pin de `EN` (Enable) poate opri/porni direct alimentarea pompei din microcontroler.
+- **Controlul pompei (`3-6V`):** folosim modulul dual MOSFET cu **D4184** (`15A`, `400W`, sub `3-6 lei`) sau un tranzistor **MOSFET Logic-Level** (**AO3400**, **IRLZ44N**) impreuna cu o dioda antiparalel rapida **1N5819 (Schottky)** pusa direct pe bornele pompei. Astfel nu avem pierderi de tensiune si putem regla debitul pompei din cod prin semnal PWM.
 - **Controlul mai multor electrovalve (`12V`):** folosim un singur circuit integrat **ULN2003A** (`~3 lei`), care are 7 canale si diode de protectie incluse, putand comanda direct pana la 7 electrovalve de la pinii de `3.3V` sau `5V` ai microcontrolerului.
 

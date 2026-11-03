@@ -31,18 +31,50 @@ Pentru a comanda pompa submersibila de `3-6V` (`130-220 mA` in mers, pana la `60
 
 ---
 
-## 3. Protectia obligatorie pentru pompa si valve (Dioda Flyback)
+## 3. Cum alimentam pompa de `6V` din sursa de `12V` (Step-Down)
+
+Pentru ca electrovalvele merg la `12V` iar pompa la `3-6V`, cel mai simplu este sa avem o singura sursa de `12V` si sa coboram tensiunea la `6V` pentru pompa:
+
+### A. Convertor DC-DC Step-Down (Buck) - Recomandat
+- **MP1584EN (Mini Step-Down)** sau **LM2596** (`~4-8 lei`): au eficienta mare (`85-92%`), nu se incalzesc si tin `1.5-2A` fara probleme. Reglam din potentiometru iesirea exact la `6V`.
+- **De ce nu regulator liniar (`LM7806`):** ca sa scada de la `12V` la `6V` la un curent de `0.5-1A`, ar transforma `3-6W` direct in caldura si ar intra in protectie termica fara radiator mare.
+
+### B. Alternative mai compacte la modulul MOSFET separat
+Modulul dual MOSFET (`D4184`, `15A`, `400W`, `~2.83 lei` pe Sigmanortec sau `6.49 lei` pe Optimus Digital) este foarte ieftin si bun, dar supradimensionat pentru pompa noastra. Daca vrem ceva mai integrat:
+1. **Step-Down cu pin de `EN` (Enable):** unele module cu **MP1584EN** sau **TPS5430** au pin `EN`. Putem lega pinul direct la microcontroler (HIGH = porneste convertorul si pompa la `6V`, LOW = opreste tot cu consum aproape zero) si scapam de modulul MOSFET.
+2. **Driver mini de motor (`DRV8833` sau `MX1508`):** module mici (`15x15 mm`) care tin `1.5A` si pot comanda direct pompa la `6V`.
+
+### C. Schema de legare (Sursa 12V -> Step-Down 6V -> Modul MOSFET -> Pompa)
+```text
+[ Sursa 12V ]
+     |
+     +---> [ Modul Step-Down IN+ / IN- ] (reglat la 6V)
+                     |
+                     +---> [ OUT+ ] ----------------------> [ Pompa (+) ]
+                     +---> [ OUT- / GND ] -> [ Modul MOSFET: VIN- ]
+                                                    |
+                                             [ Modul MOSFET: VOUT- ] -> [ Pompa (-) ]
+
+[ Microcontroler (3.3V / 5V) ]
+     +---> GPIO (PWM / ON-OFF) -> [ Modul MOSFET: TRIG/PWM ]
+     +---> GND -----------------> [ Modul MOSFET: GND ]
+```
+
+---
+
+## 4. Protectia obligatorie pentru pompa si valve (Dioda Flyback)
 
 Atat pompa, cat si electrovalvele contin bobine. Cand sunt oprite brusc, bobina produce un varf de tensiune inversa care poate arde tranzistorul sau reseta microcontrolerul.
-- Pe fiecare pompa sau valva comandata cu MOSFET/tranzistor separat se pune in paralel o **dioda antiparalel (flyback)**:
+- Pe fiecare pompa sau valva comandata cu MOSFET/tranzistor separat se pune in paralel o **dioda antiparalel (flyback)** (cu linia/catodul spre `+` si anodul spre `-`):
   - **1N5819 (Schottky)** pentru pompa (fiind rapida, permite si control PWM).
   - **1N4007** pentru electrovalve (sau se folosesc direct diodele deja integrate in cipul `ULN2003A`).
 - Pe bornele pompei e bine sa punem si un mic condensator ceramic de `100 nF` pentru a filtra zgomotul electric.
 
 ---
 
-## 4. Concluzie practica pentru schema noastra
+## 5. Concluzie practica pentru schema noastra
 
-Cea mai simpla si ieftina combinatie (sub `10 lei` in total):
-1. **Pentru pompa (`3-6V`):** un tranzistor MOSFET **AO3400 / IRLZ44N** (sau modul **D4184**) + o dioda **1N5819**, ca sa putem controla si debitul prin PWM fara pierderi de tensiune.
-2. **Pentru mai multe electrovalve (`12V`):** un singur integrat **ULN2003A** (care comanda pana la 7 valve direct de la pinii microcontrolerului, fara alte piese pe langa).
+Cea mai simpla si ieftina combinatie:
+1. **Pentru coborarea tensiunii (`12V` -> `6V`):** un modul step-down **MP1584EN** sau **LM2596** reglat la `6V`.
+2. **Pentru pompa (`3-6V`):** modulul dual MOSFET (**D4184**, `15A`) sau un tranzistor **AO3400 / IRLZ44N** + o dioda **1N5819**, ca sa putem controla si debitul prin PWM fara pierderi de tensiune.
+3. **Pentru mai multe electrovalve (`12V`):** un singur integrat **ULN2003A** (care comanda pana la 7 valve direct de la pinii microcontrolerului, fara alte piese pe langa).

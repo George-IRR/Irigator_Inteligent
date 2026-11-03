@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AquaSense Dashboard - Rand 1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .water-flow-line {
+      stroke-dasharray: 8 8;
+    }
+  </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 min-h-screen p-4 md:p-6 antialiased selection:bg-blue-500 selection:text-white">
+
+  <!-- Header -->
+  <header class="max-w-6xl mx-auto mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-zinc-800 pb-4">
+    <div>
+      <div class="flex items-center gap-3">
+        <div id="connPulse" class="w-3.5 h-3.5 rounded-full bg-zinc-600"></div>
+        <h1 class="text-2xl font-bold tracking-tight">AquaSense · Monitor Rand 1</h1>
+        <span id="connBadge" class="text-xs px-2.5 py-0.5 rounded-full bg-zinc-800 text-zinc-400 border border-zinc-700 font-mono">Deconectat</span>
+      </div>
+      <p class="text-zinc-400 text-sm mt-1">Control pompa R385, monitorizare debitmetru YF-S401 si umiditate sol</p>
+    </div>
+
+    <!-- Moduri operare si conectare -->
+    <div class="flex flex-wrap items-center gap-2">
+      <button id="btnConnectSerial" onclick="connectWebSerial()" class="px-3.5 py-2 rounded-lg text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white transition-all shadow-sm flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+        <span id="btnSerialText">Conecteaza ESP32 (USB)</span>
+      </button>
+
+      <button id="btnAutoDemo" onclick="toggleAutoDemo()" class="px-3.5 py-2 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition-all shadow-sm flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <span id="demoBtnText">Demo Scena</span>
+      </button>
+
+      <button id="btnReset" onclick="resetStats()" class="px-3 py-2 rounded-lg text-xs font-medium border border-zinc-700 bg-zinc-900 hover:bg-zinc-800 text-zinc-200 transition-colors">
+        Reset
+      </button>
+    </div>
+  </header>
+
+  <!-- Banner status demo -->
+  <div id="demoBanner" class="max-w-6xl mx-auto mb-6 hidden bg-indigo-950/40 border border-indigo-500/30 rounded-xl p-3 text-sm flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <span class="relative flex h-2.5 w-2.5">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-indigo-500"></span>
+      </span>
+      <span class="font-medium text-indigo-300">Mod Scena Activ:</span>
+      <span id="demoStepText" class="text-indigo-200 text-xs">Pas 1 - Detectie sol uscat...</span>
+    </div>
+    <span class="text-xs text-indigo-400 font-mono">Secvential complet automat</span>
+  </div>
+
+  <!-- Grid principal cu 3 panouri -->
+  <main class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+    <!-- PANOU 1: Umiditate Sol (Rand 1) -->
+    <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 shadow-sm flex flex-col justify-between">
+      <div>
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <div class="p-2 rounded-lg bg-amber-500/10 text-amber-500">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            </div>
+            <div>
+              <h2 class="font-semibold text-base">Senzor Sol · Rand 1</h2>
+              <p class="text-xs text-zinc-400">Higrometru Capacitiv v2.0 (GPIO 25)</p>
+            </div>
+          </div>
+          <span id="soilStatusBadge" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
+            USCAT
+          </span>
+        </div>
+
+        <div class="relative bg-zinc-950/60 border border-zinc-800 rounded-xl p-4 overflow-hidden my-3">
+          <div class="h-32 rounded-lg relative overflow-hidden flex flex-col justify-end bg-gradient-to-t from-stone-900 via-stone-800 to-stone-700 border border-stone-800">
+            <div id="soilWaterLevel" class="w-full bg-gradient-to-t from-blue-600/60 to-cyan-500/30 transition-all duration-500 rounded-b-lg" style="height: 18%;"></div>
+
+            <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+              <svg class="w-16 h-16 text-emerald-400 drop-shadow-md" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+              </svg>
+              <span class="text-[11px] text-zinc-300 font-mono mt-1">Radacini Active</span>
+            </div>
+          </div>
+
+          <div class="mt-4 flex items-baseline justify-between">
+            <span class="text-3xl font-extrabold tracking-tight font-mono text-zinc-100" id="soilPercentText">0%</span>
+            <div class="text-right text-xs text-zinc-400 font-mono">
+              <div>ADC: <span id="soilRawText">0</span></div>
+              <div>Tensiune: <span id="soilVoltText">0.00V</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-1.5 mt-2">
+          <div class="flex justify-between text-xs text-zinc-400">
+            <span>Control manual (Simulare):</span>
+            <span id="sliderValLabel">0%</span>
+          </div>
+          <input type="range" id="soilSlider" min="0" max="100" value="0" oninput="manualSetSoil(this.value)" class="w-full accent-blue-500 cursor-pointer">
+          <div class="flex justify-between text-[11px] text-zinc-500">
+            <span>Uscat (&lt;25%)</span>
+            <span>Optim (40-65%)</span>
+            <span>Inundat (&gt;80%)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-zinc-800 text-xs text-zinc-400 flex items-center justify-between">
+        <span>Recomandare algoritm:</span>
+        <span id="soilRecommendation" class="font-medium text-amber-400">Pornire irigare necesara</span>
+      </div>
+    </div>
+
+
+    <!-- PANOU 2: Pompa Apa R385 (Control MOSFET) -->
+    <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 shadow-sm flex flex-col justify-between">
+      <div>
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <div class="p-2 rounded-lg bg-blue-500/10 text-blue-400">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            </div>
+            <div>
+              <h2 class="font-semibold text-base">Pompa DC R385</h2>
+              <p class="text-xs text-zinc-400">Modul Dual MOSFET · PWM GPIO 26</p>
+            </div>
+          </div>
+          <span id="pumpStatusBadge" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-zinc-800 text-zinc-400 border border-zinc-700">
+            OPRITA
+          </span>
+        </div>
+
+        <!-- Animatie SVG Pompa R385 + Traseu Furtun -->
+        <div class="bg-zinc-950/60 border border-zinc-800 rounded-xl p-4 my-3 flex flex-col items-center justify-center relative">
+          <svg class="w-48 h-32" viewBox="0 0 200 120">
+            <!-- Conducta intrare apa -->
+            <path d="M 10 60 L 50 60" stroke="#1e293b" stroke-width="8" stroke-linecap="round" fill="none"/>
+            <path id="pipeInWater" d="M 10 60 L 50 60" stroke="#06b6d4" stroke-width="6" stroke-linecap="round" fill="none" class="water-flow-line hidden"/>
+
+            <!-- Corp pompa R385 -->
+            <g id="pumpBody">
+              <rect x="50" y="30" width="80" height="60" rx="10" fill="#27272a" stroke="#3f3f46" stroke-width="2"/>
+              <line x1="60" y1="40" x2="60" y2="80" stroke="#52525b" stroke-width="2"/>
+              <line x1="70" y1="40" x2="70" y2="80" stroke="#52525b" stroke-width="2"/>
+              <line x1="80" y1="40" x2="80" y2="80" stroke="#52525b" stroke-width="2"/>
+
+              <!-- Diafragma circulara -->
+              <circle cx="105" cy="60" r="18" fill="#18181b" stroke="#3b82f6" stroke-width="2"/>
+
+              <!-- Rotor pompa animat direct pe centru (105, 60) -->
+              <g id="pumpImpeller">
+                <circle cx="105" cy="60" r="4.5" fill="#60a5fa"/>
+                <line x1="105" y1="45" x2="105" y2="75" stroke="#93c5fd" stroke-width="3" stroke-linecap="round"/>
+                <line x1="90" y1="60" x2="120" y2="60" stroke="#93c5fd" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="105" cy="48" r="2.5" fill="#38bdf8"/>
+                <circle cx="105" cy="72" r="2.5" fill="#38bdf8"/>
+                <circle cx="93" cy="60" r="2.5" fill="#38bdf8"/>
+                <circle cx="117" cy="60" r="2.5" fill="#38bdf8"/>
+              </g>
+            </g>
+
+            <!-- Conducta iesire apa spre debitmetru -->
+            <path d="M 130 60 L 190 60" stroke="#1e293b" stroke-width="8" stroke-linecap="round" fill="none"/>
+            <path id="pipeOutWater" d="M 130 60 L 190 60" stroke="#06b6d4" stroke-width="6" stroke-linecap="round" fill="none" class="water-flow-line hidden"/>
+
+            <text x="100" y="105" text-anchor="middle" font-size="10" fill="#a1a1aa" font-family="monospace">12V DC · Diafragma</text>
+          </svg>
+
+          <div class="w-full flex items-center justify-between text-xs font-mono mt-2 pt-2 border-t border-zinc-800">
+            <span class="text-zinc-400">PWM Duty: <span id="pwmDutyText" class="text-zinc-200">0 / 255</span></span>
+            <span class="text-zinc-400">Putere: <span id="pwmPercentText" class="text-zinc-100 font-bold">0%</span></span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2 mt-2">
+          <button onclick="sendCommand('1')" class="py-2.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition-all shadow-sm">
+            100% Start
+          </button>
+          <button onclick="sendCommand('2')" class="py-2.5 rounded-lg text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white transition-all shadow-sm">
+            50% PWM
+          </button>
+          <button onclick="sendCommand('0')" class="py-2.5 rounded-lg text-xs font-semibold bg-red-600 hover:bg-red-500 text-white transition-all shadow-sm">
+            Stop
+          </button>
+        </div>
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-zinc-800 text-xs text-zinc-400 flex items-center justify-between">
+        <span>Protectie Flyback:</span>
+        <span class="font-mono text-emerald-400">Dioda 1N5819 Activa</span>
+      </div>
+    </div>
+
+
+    <!-- PANOU 3: Debitmetru YF-S401 (Litri pe minut & Total) -->
+    <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 shadow-sm flex flex-col justify-between">
+      <div>
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <div class="p-2 rounded-lg bg-cyan-500/10 text-cyan-400">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+            </div>
+            <div>
+              <h2 class="font-semibold text-base">Debitmetru YF-S401</h2>
+              <p class="text-xs text-zinc-400">Senzor Hall cu Palete · GPIO 27</p>
+            </div>
+          </div>
+          <span id="flowStatusBadge" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-zinc-800 text-zinc-400 border border-zinc-700">
+            FARA FLUX
+          </span>
+        </div>
+
+        <div class="bg-zinc-950/60 border border-zinc-800 rounded-xl p-4 my-3 flex flex-col items-center justify-center">
+          <svg class="w-48 h-32" viewBox="0 0 200 120">
+            <circle cx="100" cy="60" r="38" fill="#18181b" stroke="#06b6d4" stroke-width="2.5"/>
+            <circle cx="100" cy="60" r="32" fill="#09090b" opacity="0.6"/>
+
+            <rect x="25" y="52" width="40" height="16" rx="3" fill="#27272a" stroke="#3f3f46" stroke-width="1.5"/>
+            <rect x="135" y="52" width="40" height="16" rx="3" fill="#27272a" stroke="#3f3f46" stroke-width="1.5"/>
+
+            <!-- Rotor cu 6 palete animat direct pe centru (100, 60) -->
+            <g id="flowWheel">
+              <circle cx="100" cy="60" r="8" fill="#0891b2"/>
+              <line x1="100" y1="34" x2="100" y2="86" stroke="#22d3ee" stroke-width="3.5" stroke-linecap="round"/>
+              <line x1="77.5" y1="47" x2="122.5" y2="73" stroke="#22d3ee" stroke-width="3.5" stroke-linecap="round"/>
+              <line x1="77.5" y1="73" x2="122.5" y2="47" stroke="#22d3ee" stroke-width="3.5" stroke-linecap="round"/>
+              <!-- Varfuri palete -->
+              <circle cx="100" cy="35" r="3" fill="#67e8f9"/>
+              <circle cx="100" cy="85" r="3" fill="#67e8f9"/>
+              <circle cx="78" cy="47" r="3" fill="#67e8f9"/>
+              <circle cx="122" cy="73" r="3" fill="#67e8f9"/>
+              <circle cx="78" cy="73" r="3" fill="#67e8f9"/>
+              <circle cx="122" cy="47" r="3" fill="#67e8f9"/>
+            </g>
+
+            <circle cx="100" cy="28" r="3.5" fill="#ef4444"/>
+            <text x="100" y="22" text-anchor="middle" font-size="8" fill="#f87171" font-family="monospace">Hall Senzor</text>
+            <text x="100" y="112" text-anchor="middle" font-size="10" fill="#a1a1aa" font-family="monospace">0.3 - 6.0 L/min</text>
+          </svg>
+
+          <div class="w-full grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-zinc-800 text-center">
+            <div class="bg-zinc-800/40 p-2 rounded-lg">
+              <div class="text-[11px] text-zinc-400">Debit Instant</div>
+              <div class="text-xl font-extrabold text-cyan-400 font-mono"><span id="flowRateText">0.00</span> <span class="text-xs">L/min</span></div>
+            </div>
+            <div class="bg-zinc-800/40 p-2 rounded-lg">
+              <div class="text-[11px] text-zinc-400">Frecventa Hall</div>
+              <div class="text-xl font-extrabold text-blue-400 font-mono"><span id="flowFreqText">0</span> <span class="text-xs">Hz</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-zinc-950/40 border border-zinc-800 rounded-xl p-3 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-zinc-400">Volum Apa Pompat:</span>
+          </div>
+          <div class="text-right font-mono">
+            <span id="totalVolumeText" class="text-lg font-bold text-emerald-400">0.0</span> <span class="text-xs text-emerald-300">mL</span>
+            <span class="text-xs text-zinc-400 block">(<span id="totalLitersText">0.000</span> L)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-zinc-800 text-xs text-zinc-400 flex items-center justify-between">
+        <span>Factor calibrare YF-S401:</span>
+        <span class="font-mono text-cyan-400">F = 98 × Q</span>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    let serialPort = null;
+    let serialReader = null;
+    let serialWriter = null;
+    let isConnected = false;
+    let useBridge = false;
+
+    let pumpPower = 0;
+    let soilMoisture = 0;
+    let flowRate = 0.0;
+    let flowFreq = 0;
+    let totalWaterMl = 0.0;
+    let isAutoDemo = false;
+    let demoTimer = null;
+
+    // Unghiuri pentru rotatie SVG 60 FPS
+    let pumpRotorAngle = 0;
+    let flowRotorAngle = 0;
+    let waterFlowOffset = 0;
+
+    function setConnectedUI(connected, label) {
+      isConnected = connected;
+      const pulse = document.getElementById('connPulse');
+      const badge = document.getElementById('connBadge');
+      const btnText = document.getElementById('btnSerialText');
+
+      if (connected) {
+        pulse.className = 'w-3.5 h-3.5 rounded-full bg-emerald-500 animate-pulse';
+        badge.className = 'text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono';
+        badge.innerText = label || 'ESP32 Conectat Live';
+        btnText.innerText = 'Deconecteaza USB';
+      } else {
+        pulse.className = 'w-3.5 h-3.5 rounded-full bg-zinc-600';
+        badge.className = 'text-xs px-2.5 py-0.5 rounded-full bg-zinc-800 text-zinc-400 border border-zinc-700 font-mono';
+        badge.innerText = 'Deconectat';
+        btnText.innerText = 'Conecteaza ESP32 (USB)';
+      }
+    }
+
+    // Bucla de animatie continua la 60 FPS folosind native SVG transform
+    function animLoop() {
+      // 1. Daca pompa este pornita
+      if (pumpPower > 0) {
+        const pumpSpeed = (pumpPower / 100) * 14;
+        pumpRotorAngle = (pumpRotorAngle + pumpSpeed) % 360;
+        const pumpImpeller = document.getElementById('pumpImpeller');
+        if (pumpImpeller) {
+          pumpImpeller.setAttribute('transform', `rotate(${pumpRotorAngle}, 105, 60)`);
+        }
+
+        // Vibratie motor pompa
+        const pumpBody = document.getElementById('pumpBody');
+        if (pumpBody) {
+          const shakeY = (Math.sin(Date.now() / 25) * 0.7).toFixed(1);
+          pumpBody.setAttribute('transform', `translate(0, ${shakeY})`);
+        }
+
+        // Apa curge prin conducte
+        waterFlowOffset = (waterFlowOffset - (pumpPower / 100) * 4) % 32;
+        const pipeIn = document.getElementById('pipeInWater');
+        const pipeOut = document.getElementById('pipeOutWater');
+        if (pipeIn) {
+          pipeIn.style.strokeDashoffset = waterFlowOffset + 'px';
+          pipeIn.classList.remove('hidden');
+        }
+        if (pipeOut) {
+          pipeOut.style.strokeDashoffset = waterFlowOffset + 'px';
+          pipeOut.classList.remove('hidden');
+        }
+      } else {
+        const pumpBody = document.getElementById('pumpBody');
+        if (pumpBody) pumpBody.removeAttribute('transform');
+        const pipeIn = document.getElementById('pipeInWater');
+        const pipeOut = document.getElementById('pipeOutWater');
+        if (pipeIn) pipeIn.classList.add('hidden');
+        if (pipeOut) pipeOut.classList.add('hidden');
+      }
+
+      // 2. Debitmetru: se roteste daca avem debit real SAU daca pompa impinge apa
+      const effectiveFlow = (flowRate > 0) ? flowRate : (pumpPower > 0 ? (pumpPower / 100) * 2.2 : 0);
+      if (effectiveFlow > 0) {
+        const flowSpeed = Math.min(25, Math.max(3, effectiveFlow * 8));
+        flowRotorAngle = (flowRotorAngle + flowSpeed) % 360;
+        const flowWheel = document.getElementById('flowWheel');
+        if (flowWheel) {
+          flowWheel.setAttribute('transform', `rotate(${flowRotorAngle}, 100, 60)`);
+        }
+      }
+
+      requestAnimationFrame(animLoop);
+    }
+    requestAnimationFrame(animLoop);
+
+    async function connectWebSerial() {
+      if (serialPort) {
+        try {
+          if (serialReader) await serialReader.cancel();
+          if (serialPort) await serialPort.close();
+        } catch(e) {}
+        serialPort = null;
+        setConnectedUI(false);
+        return;
+      }
+
+      if (!('serial' in navigator)) {
+        alert('WebSerial nu este disponibil in acest browser. Foloseste Google Chrome sau porneste "python3 bridge.py"!');
+        return;
+      }
+
+      try {
+        serialPort = await navigator.serial.requestPort();
+        await serialPort.open({ baudRate: 115200 });
+        setConnectedUI(true, 'WebSerial Live');
+
+        const textDecoder = new TextDecoderStream();
+        serialPort.readable.pipeTo(textDecoder.writable);
+        serialReader = textDecoder.readable.getReader();
+
+        const textEncoder = new TextEncoderStream();
+        textEncoder.readable.pipeTo(serialPort.writable);
+        serialWriter = textEncoder.writable.getWriter();
+
+        let buffer = '';
+        while (true) {
+          const { value, done } = await serialReader.read();
+          if (done) break;
+          if (value) {
+            buffer += value;
+            const lines = buffer.split('\n');
+            buffer = lines.pop();
+            for (const line of lines) {
+              handleIncomingLine(line.trim());
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Eroare WebSerial:', err);
+        setConnectedUI(false);
+      }
+    }
+
+    // Parsare orice format (JSON sau text serial de pe ESP32)
+    function handleIncomingLine(line) {
+      if (!line) return;
+
+      // 1. JSON
+      if (line.startsWith('{') && line.endsWith('}')) {
+        try {
+          const d = JSON.parse(line);
+          if (d.soil !== undefined) soilMoisture = d.soil;
+          if (d.flow !== undefined) flowRate = d.flow;
+          if (d.hz !== undefined) flowFreq = d.hz;
+          if (d.total !== undefined) totalWaterMl = d.total;
+          if (d.pump !== undefined) pumpPower = d.pump;
+          if (d.raw !== undefined) document.getElementById('soilRawText').innerText = d.raw;
+          if (d.volt !== undefined) document.getElementById('soilVoltText').innerText = Number(d.volt).toFixed(2) + 'V';
+          updateUI();
+          return;
+        } catch(e) {}
+      }
+
+      // 2. Text fallback de la ESP32: [SOL] Raw: 2004 | 1.61V | Umiditate: 68%
+      const mSol = line.match(/Raw:\s*(\d+).*?([\d\.]+)V.*?Umiditate:\s*(\d+)%/);
+      if (mSol) {
+        document.getElementById('soilRawText').innerText = mSol[1];
+        document.getElementById('soilVoltText').innerText = Number(mSol[2]).toFixed(2) + 'V';
+        soilMoisture = parseInt(mSol[3], 10);
+        updateUI();
+      }
+
+      // [DEBITMETRU] Impulsuri/s: 0 | Debit: 0.00 L/min | Total: 0.0 mL
+      const mFlow = line.match(/Impulsuri\/s:\s*(\d+).*?Debit:\s*([\d\.]+).*?Total:\s*([\d\.]+)/);
+      if (mFlow) {
+        flowFreq = parseInt(mFlow[1], 10);
+        flowRate = parseFloat(mFlow[2]);
+        totalWaterMl = parseFloat(mFlow[3]);
+        updateUI();
+      }
+
+      // [POMPA] Stare: PORNITA (100%)
+      const mPump = line.match(/\((\d+)%\)/);
+      if (mPump) {
+        pumpPower = parseInt(mPump[1], 10);
+        updateUI();
+      }
+    }
+
+    async function sendCommand(cmd) {
+      // Feedback imediat in interfata
+      if (cmd === '1') {
+        pumpPower = 100;
+        flowRate = (flowRate > 0) ? flowRate : 2.2;
+        flowFreq = Math.round(flowRate * 98);
+      } else if (cmd === '2') {
+        pumpPower = 50;
+        flowRate = (flowRate > 0) ? flowRate : 1.1;
+        flowFreq = Math.round(flowRate * 98);
+      } else if (cmd === '0') {
+        pumpPower = 0;
+        flowRate = 0.0;
+        flowFreq = 0;
+      }
+      updateUI();
+
+      if (serialWriter) {
+        try {
+          await serialWriter.write(cmd + '\n');
+        } catch(e) {
+          console.error(e);
+        }
+      } else if (useBridge) {
+        fetch('/api/pump?cmd=' + encodeURIComponent(cmd)).catch(console.error);
+      }
+    }
+
+    // Polling automat Bridge Python
+    setInterval(async () => {
+      if (serialPort) return;
+      try {
+        const res = await fetch('/api/data', { cache: 'no-store' });
+        if (res.ok) {
+          const d = await res.json();
+          if (d.connected) {
+            useBridge = true;
+            setConnectedUI(true, 'Bridge Python Live');
+            handleIncomingLine(JSON.stringify(d));
+          }
+        }
+      } catch(e) {
+        if (useBridge) {
+          useBridge = false;
+          setConnectedUI(false);
+        }
+      }
+    }, 400);
+
+    function updateUI() {
+      // Pompa
+      const pumpBadge = document.getElementById('pumpStatusBadge');
+      document.getElementById('pwmPercentText').innerText = pumpPower + '%';
+      document.getElementById('pwmDutyText').innerText = Math.round(pumpPower * 2.55) + ' / 255';
+
+      if (pumpPower > 0) {
+        pumpBadge.className = 'text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20';
+        pumpBadge.innerText = 'PORNITA (' + pumpPower + '%)';
+      } else {
+        pumpBadge.className = 'text-xs font-semibold px-2.5 py-1 rounded-full bg-zinc-800 text-zinc-400 border border-zinc-700';
+        pumpBadge.innerText = 'OPRITA';
+      }
+
+      // Debitmetru
+      const flowBadge = document.getElementById('flowStatusBadge');
+      const dispFlow = (flowRate > 0) ? flowRate : (pumpPower > 0 ? (pumpPower / 100) * 2.2 : 0);
+      const dispFreq = (flowFreq > 0) ? flowFreq : Math.round(dispFlow * 98);
+
+      document.getElementById('flowRateText').innerText = dispFlow.toFixed(2);
+      document.getElementById('flowFreqText').innerText = dispFreq;
+      document.getElementById('totalVolumeText').innerText = totalWaterMl.toFixed(1);
+      document.getElementById('totalLitersText').innerText = (totalWaterMl / 1000.0).toFixed(3);
+
+      if (dispFlow > 0) {
+        flowBadge.className = 'text-xs font-semibold px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20';
+        flowBadge.innerText = 'FLUX ACTIV';
+      } else {
+        flowBadge.className = 'text-xs font-semibold px-2.5 py-1 rounded-full bg-zinc-800 text-zinc-400 border border-zinc-700';
+        flowBadge.innerText = 'FARA FLUX';
+      }
+
+      // Umiditate sol
+      document.getElementById('soilPercentText').innerText = Math.round(soilMoisture) + '%';
+      document.getElementById('soilSlider').value = Math.round(soilMoisture);
+      document.getElementById('sliderValLabel').innerText = Math.round(soilMoisture) + '%';
+      document.getElementById('soilWaterLevel').style.height = Math.min(100, Math.max(5, soilMoisture)) + '%';
+
+      const soilBadge = document.getElementById('soilStatusBadge');
+      const soilRec = document.getElementById('soilRecommendation');
+
+      if (soilMoisture < 25) {
+        soilBadge.className = 'text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20';
+        soilBadge.innerText = 'USCAT';
+        soilRec.innerText = 'Pornire irigare recomandata';
+        soilRec.className = 'font-medium text-amber-400';
+      } else if (soilMoisture <= 70) {
+        soilBadge.className = 'text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20';
+        soilBadge.innerText = 'OPTIM';
+        soilRec.innerText = 'Umiditate optima, economiseste apa';
+        soilRec.className = 'font-medium text-emerald-400';
+      } else {
+        soilBadge.className = 'text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20';
+        soilBadge.innerText = 'FOARTE UD';
+        soilRec.innerText = 'Risc de supra-udare (Stop pompa)';
+        soilRec.className = 'font-medium text-blue-400';
+      }
+    }
+
+    function manualSetSoil(val) {
+      soilMoisture = parseFloat(val);
+      updateUI();
+    }
+
+    function resetStats() {
+      totalWaterMl = 0.0;
+      sendCommand('0');
+      soilMoisture = 0;
+      updateUI();
+    }
+
+    function toggleAutoDemo() {
+      isAutoDemo = !isAutoDemo;
+      const banner = document.getElementById('demoBanner');
+      const btnText = document.getElementById('demoBtnText');
+
+      if (isAutoDemo) {
+        banner.classList.remove('hidden');
+        btnText.innerText = 'Opreste Demo';
+        runDemoSequence();
+      } else {
+        banner.classList.add('hidden');
+        btnText.innerText = 'Demo Scena';
+        clearTimeout(demoTimer);
+        sendCommand('0');
+      }
+    }
+
+    function runDemoSequence() {
+      if (!isAutoDemo) return;
+      const stepText = document.getElementById('demoStepText');
+
+      stepText.innerText = 'Pas 1: Sol uscat detectat (16%). Deficit de apa.';
+      soilMoisture = 16;
+      sendCommand('0');
+
+      demoTimer = setTimeout(() => {
+        if (!isAutoDemo) return;
+        stepText.innerText = 'Pas 2: Algoritmul porneste pompa prin MOSFET (80% PWM). Flux detectat de YF-S401.';
+        sendCommand('1');
+
+        demoTimer = setTimeout(() => {
+          if (!isAutoDemo) return;
+          stepText.innerText = 'Pas 3: Prag optim atins (55%). Oprire automata.';
+          sendCommand('0');
+
+          demoTimer = setTimeout(() => {
+            if (!isAutoDemo) return;
+            stepText.innerText = 'Ciclu finalizat cu succes!';
+            demoTimer = setTimeout(runDemoSequence, 3000);
+          }, 3000);
+
+        }, 7000);
+
+      }, 3000);
+    }
+
+    // Acumulare volum apa
+    setInterval(() => {
+      if (pumpPower > 0) {
+        const flow = (flowRate > 0) ? flowRate : (pumpPower / 100) * 2.2;
+        const added = (flow * 1000.0) / 60.0 * 0.2;
+        totalWaterMl += added;
+        document.getElementById('totalVolumeText').innerText = totalWaterMl.toFixed(1);
+        document.getElementById('totalLitersText').innerText = (totalWaterMl / 1000.0).toFixed(3);
+
+        if (soilMoisture < 95 && isAutoDemo) {
+          soilMoisture += 0.5;
+          updateUI();
+        }
+      }
+    }, 200);
+
+    updateUI();
+  </script>
+</body>
+</html>
