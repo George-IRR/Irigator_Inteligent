@@ -12,7 +12,7 @@
 // ==========================================
 #define PWM_CHANNEL   0
 #define PWM_FREQ      5000 // 5 kHz comutare silentioasa
-#define PWM_RES       8    // Rezolutie 8 biti: 0 (oprit) - 255 (100% forta)
+#define PWM_RES       8    // Rezolutie 8 biti: 0 - 255
 
 // ==========================================
 // CALIBRARE SENZOR SOL
@@ -27,38 +27,23 @@ const float FLOW_CALIBRATION_FACTOR = 98.0; // F = 98 * Q (L/min)
 volatile unsigned long pulseCount = 0;
 unsigned long lastCalcTime = 0;
 float totalMilliliters = 0.0;
-
-// Stare pompa curenta (duty: 0 - 255)
-int pumpSpeed = 0;
+int pumpPowerPercent = 0;
 
 void IRAM_ATTR pulseCounter() {
   pulseCount++;
 }
 
-// Functie pentru setarea puterii pompei (0 - 100%)
 void setPumpPower(int percent) {
-  percent = constrain(percent, 0, 100);
-  pumpSpeed = map(percent, 0, 100, 0, 255);
-  ledcWrite(PWM_CHANNEL, pumpSpeed);
-  Serial.printf("[POMPA] Putere setata: %d%% (PWM Duty: %d/255)\n", percent, pumpSpeed);
+  pumpPowerPercent = constrain(percent, 0, 100);
+  int duty = map(pumpPowerPercent, 0, 100, 0, 255);
+  ledcWrite(PWM_CHANNEL, duty);
 }
 
 void setup() {
   Serial.begin(115200);
-  delay(1000);
+  delay(500);
 
-  Serial.println();
-  Serial.println("==================================================");
-  Serial.println("  AquaSense - Test Senzor Sol, Debit & MOSFET    ");
-  Serial.println("  Sol: GPIO 25 | Debit: GPIO 27 | MOSFET: GPIO 26 ");
-  Serial.println("==================================================");
-  Serial.println("Comenzi in terminal:");
-  Serial.println("  '1' -> Porneste pompa la 100%");
-  Serial.println("  '2' -> Porneste pompa la 50% (PWM)");
-  Serial.println("  '0' -> Opreste pompa");
-  Serial.println("==================================================");
-
-  // 1. Configurare ADC sol
+  // 1. Configurare ADC sol (12 biti)
   analogReadResolution(12);
   analogSetPinAttenuation(SOIL_PIN, ADC_11db);
 
@@ -66,16 +51,16 @@ void setup() {
   pinMode(FLOW_PIN, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(FLOW_PIN), pulseCounter, FALLING);
 
-  // 3. Configurare PWM pentru comanda MOSFET
+  // 3. Configurare PWM MOSFET
   ledcSetup(PWM_CHANNEL, PWM_FREQ, PWM_RES);
   ledcAttachPin(PUMP_PIN, PWM_CHANNEL);
-  setPumpPower(0); // Pornim cu pompa oprita
+  setPumpPower(0);
 
   lastCalcTime = millis();
 }
 
 void loop() {
-  // Verificare comenzi primite prin terminalul USART
+  // Procesare comenzi din Serial / WebSerial
   if (Serial.available() > 0) {
     char cmd = Serial.read();
     if (cmd == '1') {
@@ -84,13 +69,15 @@ void loop() {
       setPumpPower(50);
     } else if (cmd == '0') {
       setPumpPower(0);
+    } else if (cmd == 'P') {
+      int val = Serial.parseInt();
+      setPumpPower(val);
     }
   }
 
-  // La fiecare secunda afisam telemetria completa
+  // Telemetrie la fiecare 500 ms (raspuns rapid pentru dashboard)
   unsigned long now = millis();
-  if (now - lastCalcTime >= 1000) {
-    // Calcule debit
+  if (now - lastCalcTime >= 500) {
     noInterrupts();
     unsigned long pulses = pulseCount;
     pulseCount = 0;
@@ -99,6 +86,7 @@ void loop() {
     unsigned long elapsedTime = now - lastCalcTime;
     lastCalcTime = now;
 
+    // Calcule debit
     float frequency = (pulses * 1000.0) / elapsedTime;
     float flowRateLpm = frequency / FLOW_CALIBRATION_FACTOR;
     float currentMilliliters = (flowRateLpm / 60.0) * (elapsedTime / 1000.0) * 1000.0;
@@ -106,20 +94,17 @@ void loop() {
 
     // Citire umiditate sol
     long sum = 0;
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 5; i++) {
       sum += analogRead(SOIL_PIN);
-      delay(5);
+      delay(2);
     }
-    int rawSoil = sum / 10;
+    int rawSoil = sum / 5;
     float soilVoltage = (rawSoil / 4095.0) * 3.3;
     int soilPercent = map(rawSoil, AIR_VALUE, WATER_VALUE, 0, 100);
     soilPercent = constrain(soilPercent, 0, 100);
 
-    // Afisare formatata
-    Serial.println("--------------------------------------------------");
-    Serial.printf("[SOL]        Raw: %-4d | %4.2fV | Umiditate: %3d%%\n", rawSoil, soilVoltage, soilPercent);
-    Serial.printf("[DEBITMETRU] Impulsuri/s: %-3lu | Debit: %5.2f L/min | Total: %6.1f mL\n", 
-                  pulses, flowRateLpm, totalMilliliters);
-    Serial.printf("[POMPA]      Stare: %s (%d%%)\n", (pumpSpeed > 0 ? "PORNITA" : "OPRITA"), map(pumpSpeed, 0, 255, 0, 100));
+    // Trimitem JSON direct pe Serial pentru Dashboard
+    Serial.printf("{\"soil\":%d,\"raw\":%d,\"volt\":%.2f,\"flow\":%.2f,\"hz\":%d,\"total\":%.1f,\"pump\":%d}\n",
+                  soilPercent, rawSoil, soilVoltage, flowRateLpm, (int)frequency, totalMilliliters, pumpPowerPercent);
   }
 }

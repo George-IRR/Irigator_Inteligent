@@ -38,21 +38,27 @@
   <header class="max-w-6xl mx-auto mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-zinc-800 pb-4">
     <div>
       <div class="flex items-center gap-3">
-        <div class="w-3.5 h-3.5 rounded-full bg-emerald-500 animate-pulse"></div>
+        <div id="connPulse" class="w-3.5 h-3.5 rounded-full bg-zinc-600"></div>
         <h1 class="text-2xl font-bold tracking-tight">AquaSense · Monitor Rand 1</h1>
-        <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-mono">ESP32 Live</span>
+        <span id="connBadge" class="text-xs px-2.5 py-0.5 rounded-full bg-zinc-800 text-zinc-400 border border-zinc-700 font-mono">Deconectat</span>
       </div>
       <p class="text-zinc-400 text-sm mt-1">Control pompa R385, monitorizare debitmetru YF-S401 si umiditate sol</p>
     </div>
 
-    <!-- Moduri operare -->
-    <div class="flex items-center gap-2">
+    <!-- Moduri operare si conectare -->
+    <div class="flex flex-wrap items-center gap-2">
+      <button id="btnConnectSerial" onclick="connectWebSerial()" class="px-3.5 py-2 rounded-lg text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white transition-all shadow-sm flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+        <span id="btnSerialText">Conecteaza ESP32 (USB)</span>
+      </button>
+
       <button id="btnAutoDemo" onclick="toggleAutoDemo()" class="px-3.5 py-2 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition-all shadow-sm flex items-center gap-2">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-        <span id="demoBtnText">Porneste Demo Autonom (Scena)</span>
+        <span id="demoBtnText">Demo Scena</span>
       </button>
+
       <button id="btnReset" onclick="resetStats()" class="px-3 py-2 rounded-lg text-xs font-medium border border-zinc-700 bg-zinc-900 hover:bg-zinc-800 text-zinc-200 transition-colors">
-        Reset Total
+        Reset
       </button>
     </div>
   </header>
@@ -105,21 +111,20 @@
           </div>
 
           <div class="mt-4 flex items-baseline justify-between">
-            <span class="text-3xl font-extrabold tracking-tight font-mono text-zinc-100" id="soilPercentText">18%</span>
+            <span class="text-3xl font-extrabold tracking-tight font-mono text-zinc-100" id="soilPercentText">0%</span>
             <div class="text-right text-xs text-zinc-400 font-mono">
-              <div>ADC: <span id="soilRawText">3120</span></div>
-              <div>Tensiune: <span id="soilVoltText">2.51V</span></div>
+              <div>ADC: <span id="soilRawText">0</span></div>
+              <div>Tensiune: <span id="soilVoltText">0.00V</span></div>
             </div>
           </div>
         </div>
 
-        <!-- Slider interactiv simulare / test manual -->
         <div class="space-y-1.5 mt-2">
           <div class="flex justify-between text-xs text-zinc-400">
-            <span>Simuleaza nivel sol:</span>
-            <span id="sliderValLabel">18%</span>
+            <span>Control manual (Simulare):</span>
+            <span id="sliderValLabel">0%</span>
           </div>
-          <input type="range" id="soilSlider" min="0" max="100" value="18" oninput="manualSetSoil(this.value)" class="w-full accent-blue-500 cursor-pointer">
+          <input type="range" id="soilSlider" min="0" max="100" value="0" oninput="manualSetSoil(this.value)" class="w-full accent-blue-500 cursor-pointer">
           <div class="flex justify-between text-[11px] text-zinc-500">
             <span>Uscat (&lt;25%)</span>
             <span>Optim (40-65%)</span>
@@ -186,13 +191,13 @@
         </div>
 
         <div class="grid grid-cols-3 gap-2 mt-2">
-          <button onclick="setPump(100)" class="py-2.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition-all shadow-sm">
+          <button onclick="sendCommand('1')" class="py-2.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition-all shadow-sm">
             100% Start
           </button>
-          <button onclick="setPump(50)" class="py-2.5 rounded-lg text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white transition-all shadow-sm">
+          <button onclick="sendCommand('2')" class="py-2.5 rounded-lg text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white transition-all shadow-sm">
             50% PWM
           </button>
-          <button onclick="setPump(0)" class="py-2.5 rounded-lg text-xs font-semibold bg-red-600 hover:bg-red-500 text-white transition-all shadow-sm">
+          <button onclick="sendCommand('0')" class="py-2.5 rounded-lg text-xs font-semibold bg-red-600 hover:bg-red-500 text-white transition-all shadow-sm">
             Stop
           </button>
         </div>
@@ -274,19 +279,150 @@
 
   </main>
 
-  <!-- Script logic & animatii -->
   <script>
+    let serialPort = null;
+    let serialReader = null;
+    let serialWriter = null;
+    let isConnected = false;
+    let useBridge = false;
+
     let pumpPower = 0;
-    let soilMoisture = 18;
+    let soilMoisture = 0;
     let flowRate = 0.0;
     let flowFreq = 0;
     let totalWaterMl = 0.0;
     let isAutoDemo = false;
-    let demoStep = 0;
     let demoTimer = null;
 
+    function setConnectedUI(connected, label) {
+      isConnected = connected;
+      const pulse = document.getElementById('connPulse');
+      const badge = document.getElementById('connBadge');
+      const btnText = document.getElementById('btnSerialText');
+
+      if (connected) {
+        pulse.className = 'w-3.5 h-3.5 rounded-full bg-emerald-500 animate-pulse';
+        badge.className = 'text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono';
+        badge.innerText = label || 'ESP32 Conectat Live';
+        btnText.innerText = 'Deconecteaza USB';
+      } else {
+        pulse.className = 'w-3.5 h-3.5 rounded-full bg-zinc-600';
+        badge.className = 'text-xs px-2.5 py-0.5 rounded-full bg-zinc-800 text-zinc-400 border border-zinc-700 font-mono';
+        badge.innerText = 'Deconectat';
+        btnText.innerText = 'Conecteaza ESP32 (USB)';
+      }
+    }
+
+    // 1. Conectare WebSerial (Chrome / Chromium / Edge)
+    async function connectWebSerial() {
+      if (serialPort) {
+        try {
+          if (serialReader) await serialReader.cancel();
+          if (serialPort) await serialPort.close();
+        } catch(e) {}
+        serialPort = null;
+        setConnectedUI(false);
+        return;
+      }
+
+      if (!('serial' in navigator)) {
+        alert('WebSerial nu este suportat direct in acest browser. Porneste "python3 bridge.py" din terminal si reincarca!');
+        return;
+      }
+
+      try {
+        serialPort = await navigator.serial.requestPort();
+        await serialPort.open({ baudRate: 115200 });
+        setConnectedUI(true, 'WebSerial Live');
+
+        const textDecoder = new TextDecoderStream();
+        serialPort.readable.pipeTo(textDecoder.writable);
+        serialReader = textDecoder.readable.getReader();
+
+        const textEncoder = new TextEncoderStream();
+        textEncoder.readable.pipeTo(serialPort.writable);
+        serialWriter = textEncoder.writable.getWriter();
+
+        let buffer = '';
+        while (true) {
+          const { value, done } = await serialReader.read();
+          if (done) break;
+          if (value) {
+            buffer += value;
+            const lines = buffer.split('\n');
+            buffer = lines.pop();
+            for (const line of lines) {
+              handleIncomingLine(line.trim());
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Eroare WebSerial:', err);
+        setConnectedUI(false);
+      }
+    }
+
+    // 2. Procesare date primite de la ESP32 (format JSON)
+    function handleIncomingLine(line) {
+      if (!line.startsWith('{') || !line.endsWith('}')) return;
+      try {
+        const d = JSON.parse(line);
+        soilMoisture = d.soil !== undefined ? d.soil : soilMoisture;
+        flowRate = d.flow !== undefined ? d.flow : flowRate;
+        flowFreq = d.hz !== undefined ? d.hz : flowFreq;
+        totalWaterMl = d.total !== undefined ? d.total : totalWaterMl;
+        pumpPower = d.pump !== undefined ? d.pump : pumpPower;
+
+        if (d.raw !== undefined) document.getElementById('soilRawText').innerText = d.raw;
+        if (d.volt !== undefined) document.getElementById('soilVoltText').innerText = d.volt.toFixed(2) + 'V';
+
+        updateUI();
+      } catch(e) {}
+    }
+
+    // 3. Trimitere comenzi catre ESP32 (WebSerial sau Bridge)
+    async function sendCommand(cmd) {
+      if (serialWriter) {
+        try {
+          await serialWriter.write(cmd + '\n');
+        } catch(e) {
+          console.error(e);
+        }
+      } else if (useBridge) {
+        fetch('/api/pump?cmd=' + encodeURIComponent(cmd)).catch(console.error);
+      } else {
+        // Mod simulare offline
+        if (cmd === '1') pumpPower = 100;
+        else if (cmd === '2') pumpPower = 50;
+        else if (cmd === '0') pumpPower = 0;
+        updateUI();
+      }
+    }
+
+    // 4. Verificare automata Bridge Python (daca e pornit pe localhost:8080)
+    setInterval(async () => {
+      if (serialPort) return; // Prioritate WebSerial
+      try {
+        const res = await fetch('/api/data', { cache: 'no-store' });
+        if (res.ok) {
+          const d = await res.json();
+          if (d.connected) {
+            useBridge = true;
+            setConnectedUI(true, 'Bridge Python Live');
+            handleIncomingLine(JSON.stringify(d));
+          }
+        }
+      } catch(e) {
+        if (useBridge) {
+          useBridge = false;
+          setConnectedUI(false);
+        }
+      }
+    }, 500);
+
+    // Actualizare interfata grafica si animatii
     function updateUI() {
-      // 1. Pompa
+      // Pompa
       const pumpBadge = document.getElementById('pumpStatusBadge');
       const pumpBody = document.getElementById('pumpBody');
       const pipeIn = document.getElementById('pipeInWater');
@@ -308,9 +444,6 @@
         const impellerSpeed = Math.max(0.08, 0.5 - (pumpPower / 250));
         pumpImpeller.style.animation = `rotateRotor ${impellerSpeed}s linear infinite`;
         pumpImpeller.style.transformOrigin = '105px 60px';
-
-        flowRate = (pumpPower / 100) * 2.2;
-        flowFreq = Math.round(flowRate * 98.0);
       } else {
         pumpBadge.className = 'text-xs font-semibold px-2.5 py-1 rounded-full bg-zinc-800 text-zinc-400 border border-zinc-700';
         pumpBadge.innerText = 'OPRITA';
@@ -320,16 +453,15 @@
         pipeOut.classList.add('hidden');
         pipeOut.classList.remove('water-flow');
         pumpImpeller.style.animation = 'none';
-
-        flowRate = 0.0;
-        flowFreq = 0;
       }
 
-      // 2. Debitmetru
+      // Debitmetru
       const flowBadge = document.getElementById('flowStatusBadge');
       const flowWheel = document.getElementById('flowWheel');
       document.getElementById('flowRateText').innerText = flowRate.toFixed(2);
       document.getElementById('flowFreqText').innerText = flowFreq;
+      document.getElementById('totalVolumeText').innerText = totalWaterMl.toFixed(1);
+      document.getElementById('totalLitersText').innerText = (totalWaterMl / 1000.0).toFixed(3);
 
       if (flowRate > 0) {
         flowBadge.className = 'text-xs font-semibold px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20';
@@ -342,16 +474,11 @@
         flowWheel.style.animation = 'none';
       }
 
-      // 3. Umiditate sol
+      // Umiditate sol
       document.getElementById('soilPercentText').innerText = Math.round(soilMoisture) + '%';
       document.getElementById('soilSlider').value = Math.round(soilMoisture);
       document.getElementById('sliderValLabel').innerText = Math.round(soilMoisture) + '%';
       document.getElementById('soilWaterLevel').style.height = Math.min(100, Math.max(5, soilMoisture)) + '%';
-
-      const adcVal = Math.round(3200 - (soilMoisture / 100) * (3200 - 1450));
-      const voltVal = (adcVal / 4095.0) * 3.3;
-      document.getElementById('soilRawText').innerText = adcVal;
-      document.getElementById('soilVoltText').innerText = voltVal.toFixed(2) + 'V';
 
       const soilBadge = document.getElementById('soilStatusBadge');
       const soilRec = document.getElementById('soilRecommendation');
@@ -374,11 +501,6 @@
       }
     }
 
-    function setPump(percent) {
-      pumpPower = percent;
-      updateUI();
-    }
-
     function manualSetSoil(val) {
       soilMoisture = parseFloat(val);
       updateUI();
@@ -386,31 +508,10 @@
 
     function resetStats() {
       totalWaterMl = 0.0;
-      document.getElementById('totalVolumeText').innerText = '0.0';
-      document.getElementById('totalLitersText').innerText = '0.000';
-      setPump(0);
-      soilMoisture = 18;
+      sendCommand('0');
+      soilMoisture = 0;
       updateUI();
     }
-
-    setInterval(() => {
-      if (pumpPower > 0) {
-        const addedMl = (flowRate * 1000.0) / 60.0 * 0.2;
-        totalWaterMl += addedMl;
-        document.getElementById('totalVolumeText').innerText = totalWaterMl.toFixed(1);
-        document.getElementById('totalLitersText').innerText = (totalWaterMl / 1000.0).toFixed(3);
-
-        if (soilMoisture < 95) {
-          soilMoisture += (pumpPower / 100) * 0.4;
-          updateUI();
-        }
-      } else {
-        if (soilMoisture > 15 && !isAutoDemo) {
-          soilMoisture -= 0.02;
-          updateUI();
-        }
-      }
-    }, 200);
 
     function toggleAutoDemo() {
       isAutoDemo = !isAutoDemo;
@@ -419,13 +520,13 @@
 
       if (isAutoDemo) {
         banner.classList.remove('hidden');
-        btnText.innerText = 'Opreste Demo Scena';
+        btnText.innerText = 'Opreste Demo';
         runDemoSequence();
       } else {
         banner.classList.add('hidden');
-        btnText.innerText = 'Porneste Demo Autonom (Scena)';
+        btnText.innerText = 'Demo Scena';
         clearTimeout(demoTimer);
-        setPump(0);
+        sendCommand('0');
       }
     }
 
@@ -433,24 +534,24 @@
       if (!isAutoDemo) return;
       const stepText = document.getElementById('demoStepText');
 
-      stepText.innerText = 'Pas 1: Solul este uscat (16%). Algoritmul detecteaza deficit de apa.';
+      stepText.innerText = 'Pas 1: Sol uscat detectat (16%). Deficit de apa.';
       soilMoisture = 16;
-      setPump(0);
+      sendCommand('0');
       updateUI();
 
       demoTimer = setTimeout(() => {
         if (!isAutoDemo) return;
-        stepText.innerText = 'Pas 2: Algoritmul comanda pompa prin MOSFET la 80% PWM. Porneste fluxul.';
-        setPump(80);
+        stepText.innerText = 'Pas 2: Algoritmul porneste pompa prin MOSFET (80% PWM). Flux detectat de YF-S401.';
+        sendCommand('1');
 
         demoTimer = setTimeout(() => {
           if (!isAutoDemo) return;
-          stepText.innerText = 'Pas 3: Umiditatea solului a atins pragul optim (55%). Oprire automata pompa.';
-          setPump(0);
+          stepText.innerText = 'Pas 3: Prag optim atins (55%). Oprire automata.';
+          sendCommand('0');
 
           demoTimer = setTimeout(() => {
             if (!isAutoDemo) return;
-            stepText.innerText = 'Ciclu demonstrat cu succes! Se repeta secventa...';
+            stepText.innerText = 'Ciclu finalizat cu succes!';
             demoTimer = setTimeout(runDemoSequence, 3000);
           }, 3000);
 
